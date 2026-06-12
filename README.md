@@ -1,6 +1,4 @@
-Here’s a **professional + engaging GitHub README** for **SRC (Sri Radhey Consultancy)**. I’ve made it recruiter-friendly, developer-friendly, and added badges/code sections so it looks polished on GitHub.
 
----
 
 # 🚀 SRC — Sri Radhey Consultancy Website
 
