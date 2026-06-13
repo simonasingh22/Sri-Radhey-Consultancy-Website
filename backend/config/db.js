@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri = process.env.MONGO_URL;
   if (!uri) {
     throw new Error('MONGO_URI is not configured in environment');
   }
@@ -11,7 +11,7 @@ const connectDB = async () => {
     mongoose.set('strictQuery', true);
 
     await mongoose.connect(uri, {
-      maxPoolSize: Number(process.env.MONGO_URL) || 10,
+      maxPoolSize: Number(process.env.MONGO_MAX_POOL_SIZE) || 10,
     });
 
     console.log('MongoDB connected');
