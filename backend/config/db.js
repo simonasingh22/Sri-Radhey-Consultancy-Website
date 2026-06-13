@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   const uri = process.env.MONGO_URL;
+
   if (!uri) {
-    throw new Error('MONGO_URI is not configured in environment');
+    throw new Error('MONGO_URL is not configured in environment');
   }
 
   try {
-    // recommended mongoose options
     mongoose.set('strictQuery', true);
 
     await mongoose.connect(uri, {
