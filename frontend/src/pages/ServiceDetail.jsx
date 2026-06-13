@@ -1,10 +1,12 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, CheckCircle2, ChevronRight, FileText, HelpCircle, PhoneCall } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 import { servicesData } from './Services';
+import SEO, { SITE_URL } from '../components/SEO';
 
 export default function ServiceDetail() {
+  const { settings } = useSettings();
   const { slug } = useParams();
   const service = servicesData.find(s => s.slug === slug);
 
@@ -31,10 +33,25 @@ export default function ServiceDetail() {
 
   return (
     <>
-      <Helmet>
-        <title>{service.name} in UP | Sri Radhey Consultancy</title>
-        <meta name="description" content={`Claim benefits or secure NOC for ${service.name} in Uttar Pradesh. We format files and represent your application at the DIC and state offices.`} />
-      </Helmet>
+      <SEO
+        title={`${service.name} in UP`}
+        description={`Claim benefits or secure NOC for ${service.name} in Uttar Pradesh. We format files and represent your application at DIC and state offices.`}
+        path={`/services/${service.slug}`}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          name: service.name,
+          description: service.description,
+          serviceType: service.category,
+          areaServed: 'Uttar Pradesh',
+          provider: {
+            '@type': 'ProfessionalService',
+            name: 'Sri Radhey Consultancy',
+            url: SITE_URL,
+          },
+          url: `${SITE_URL}/services/${service.slug}`,
+        }}
+      />
 
       {/* Hero Banner */}
       <section className="bg-primary text-white py-16 px-6 relative border-b border-accent/20">
@@ -115,7 +132,7 @@ export default function ServiceDetail() {
               
               <div className="pt-4 border-t border-white/10 flex items-center gap-3 justify-center text-xs text-white/80">
                 <PhoneCall className="w-4 h-4 text-accent" />
-                <span>Call Center: +91-9999999999</span>
+                <span>Call Center: {settings.phone}</span>
               </div>
             </div>
 

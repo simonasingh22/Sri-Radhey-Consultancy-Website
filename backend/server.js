@@ -20,13 +20,28 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+const allowedOrigins = (process.env.CLIENT_URLS || process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+}));
 app.use(helmet());
 app.disable('x-powered-by');
 // Rate limiting
 const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 app.use(limiter);
-app.use(morgan('dev'));
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
 
 // Apply stricter limits for auth and leads endpoints
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20 });
@@ -57,9 +72,12 @@ const start = async () => {
 
     // Serve frontend static if in production and frontend build exists
     if (process.env.NODE_ENV === 'production') {
-      const frontendBuild = path.join(__dirname, '..', 'frontend', 'dist');
+      const frontendBuild = process.env.FRONTEND_BUILD_PATH || path.join(__dirname, '..', 'frontend', 'dist');
       app.use(express.static(frontendBuild));
-      app.get('*', (req, res) => res.sendFile(path.join(frontendBuild, 'index.html')));
+      app.get('*', (req, res, next) => {
+        if (req.path.startsWith('/api')) return next();
+        return res.sendFile(path.join(frontendBuild, 'index.html'));
+      });
     }
 
     app.use(errorHandler);

@@ -1,14 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Calendar, User, Clock, PhoneCall } from 'lucide-react';
-import { blogPosts } from './Blog';
+import { ArrowLeft, Calendar, User, Clock, PhoneCall, Loader2 } from 'lucide-react';
+import axios from 'axios';
+import { useSettings } from '../context/SettingsContext';
+import SEO, { SITE_URL } from '../components/SEO';
 
 export default function BlogDetail() {
   const { slug } = useParams();
-  const post = blogPosts.find(p => p.slug === slug);
+  const { settings } = useSettings();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  if (!post) {
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await axios.get(`/api/blogs/${slug}`);
+        setPost(res.data);
+      } catch (err) {
+        console.error('Failed to load blog post:', err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 space-y-4">
+        <Loader2 className="w-10 h-10 text-accent animate-spin" />
+        <p className="text-sm text-text-muted">Loading article details...</p>
+      </div>
+    );
+  }
+
+  if (error || !post) {
     return (
       <div className="max-w-md mx-auto py-24 text-center px-6">
         <h1 className="text-3xl font-bold text-primary font-display mb-4">Post Not Found</h1>
@@ -20,13 +48,46 @@ export default function BlogDetail() {
     );
   }
 
+  const formattedDate = new Date(post.createdAt).toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
+  const words = post.content ? post.content.split(/\s+/).length : 0;
+  const readTime = Math.max(1, Math.ceil(words / 200)) + " min read";
+  const tags = [post.category, ...(post.keywords || [])].filter(Boolean);
+  const metaTitle = post.metaTitle || `${post.title} | Sri Radhey Consultancy Blog`;
+  const metaDescription = post.metaDescription || post.excerpt;
+
   return (
     <>
-      <Helmet>
-        <title>{post.title} | Sri Radhey Consultancy Blog</title>
-        <meta name="description" content={post.excerpt} />
-        <meta name="keywords" content={post.tags.join(', ')} />
-      </Helmet>
+      <SEO
+        title={metaTitle}
+        description={metaDescription}
+        path={`/blog/${post.slug}`}
+        type="article"
+        image={post.featuredImage}
+        keywords={post.keywords}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: metaDescription,
+          image: post.featuredImage,
+          datePublished: post.createdAt,
+          dateModified: post.updatedAt || post.createdAt,
+          url: `${SITE_URL}/blog/${post.slug}`,
+          author: {
+            '@type': 'Organization',
+            name: 'Sri Radhey Consultancy',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Sri Radhey Consultancy',
+          },
+        }}
+      />
 
       {/* Hero Banner */}
       <section className="bg-primary text-white py-16 px-6 relative border-b border-accent/20">
@@ -37,9 +98,15 @@ export default function BlogDetail() {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-display">{post.title}</h1>
           
           <div className="flex flex-wrap items-center gap-4 text-xs text-white/70">
-            <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {post.date}</span>
-            <span className="flex items-center gap-1"><User className="w-3.5 h-3.5" /> {post.author}</span>
-            <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {post.readTime}</span>
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-accent" /> {formattedDate}
+            </span>
+            <span className="flex items-center gap-1">
+              <User className="w-3.5 h-3.5 text-accent" /> Consultancy Desk
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5 text-accent" /> {readTime}
+            </span>
           </div>
         </div>
       </section>
@@ -50,11 +117,26 @@ export default function BlogDetail() {
           
           {/* Post body */}
           <div className="lg:col-span-8 space-y-6">
-            <p className="text-xs sm:text-sm text-text font-medium leading-relaxed bg-background-alt p-4 rounded-lg border border-black/5">
-              {post.excerpt}
-            </p>
+            {post.excerpt && (
+              <p className="text-xs sm:text-sm text-text font-medium leading-relaxed bg-background-alt p-4 rounded-lg border border-black/5">
+                {post.excerpt}
+              </p>
+            )}
+            
+            {post.featuredImage && (
+              <div className="w-full rounded-xl overflow-hidden border border-black/5 max-h-[350px] mb-4">
+                <img 
+                  src={post.featuredImage} 
+                  alt={post.title} 
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+            )}
+
             <div className="text-xs sm:text-sm text-text-muted leading-relaxed whitespace-pre-line space-y-4">
-              {post.content} Our consultancy monitors these regulations daily. Applying under any state incentive framework requires structured balance sheets, valid Udyam certificates, and verified invoices compiled according to regulatory inspection criteria.
+              {post.content}
             </div>
           </div>
 
@@ -73,7 +155,7 @@ export default function BlogDetail() {
               </Link>
               <div className="pt-2 border-t border-white/10 text-[10px] text-white/60 flex items-center justify-center gap-1">
                 <PhoneCall className="w-3 h-3 text-accent" />
-                <span>+91-9999999999</span>
+                <span>{settings.phone}</span>
               </div>
             </div>
           </div>

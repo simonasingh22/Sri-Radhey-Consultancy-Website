@@ -1,9 +1,26 @@
 const mongoose = require('mongoose');
 
+const LEAD_STATUSES = [
+  'New Lead',
+  'Contacted',
+  'Meeting Scheduled',
+  'WhatsApp Group Created',
+  'Documents Pending',
+  'Documents Received',
+  'Application Filed',
+  'Under Review',
+  'DIC Follow-Up',
+  'Approved',
+  'Subsidy Received',
+  'Rejected',
+];
+
 const LeadSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
     company: { type: String, trim: true },
+    companyName: { type: String, trim: true },
+    industry: { type: String, trim: true },
     phone: { type: String, required: true, trim: true },
     whatsappNumber: { type: String, trim: true },
     email: { type: String, required: true, trim: true, index: true },
@@ -12,17 +29,11 @@ const LeadSchema = new mongoose.Schema(
     message: { type: String, trim: true },
     status: {
       type: String,
-      enum: [
-        'New',
-        'Contacted',
-        'Documents Pending',
-        'Applied',
-        'In Process',
-        'Subsidy Received',
-      ],
-      default: 'New',
+      enum: LEAD_STATUSES,
+      default: 'New Lead',
       index: true,
     },
+    assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin', index: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
     notes: [
       {
@@ -33,7 +44,7 @@ const LeadSchema = new mongoose.Schema(
     ],
     statusHistory: [
       {
-        status: { type: String, trim: true },
+        status: { type: String, enum: LEAD_STATUSES },
         updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
         updatedAt: { type: Date, default: Date.now },
       },
@@ -45,4 +56,7 @@ const LeadSchema = new mongoose.Schema(
 LeadSchema.index({ phone: 1 });
 LeadSchema.index({ createdAt: -1 });
 
-module.exports = mongoose.models.Lead || mongoose.model('Lead', LeadSchema);
+const Lead = mongoose.models.Lead || mongoose.model('Lead', LeadSchema);
+
+module.exports = Lead;
+module.exports.LEAD_STATUSES = LEAD_STATUSES;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { 
   Award, ShieldCheck, FileText, Settings, CreditCard, Landmark, 
   RefreshCw, Layers, Leaf, Users, Zap, Shield, BookOpen, HardHat 
 } from 'lucide-react';
+import SEO, { SITE_URL } from '../components/SEO';
 
 export const servicesData = [
   {
@@ -124,10 +124,23 @@ export const servicesData = [
 export default function Services() {
   return (
     <>
-      <Helmet>
-        <title>Industrial Subsidy & Compliance Services | Sri Radhey Consultancy</title>
-        <meta name="description" content="Explore our 14 core industrial services including UP MSME subsidy claims, Pollution NOC, Factory License, and DIC liaisoning." />
-      </Helmet>
+      <SEO
+        title="Industrial Subsidy & Compliance Services"
+        description="Explore industrial services including UP MSME subsidy claims, capital subsidy, SGST reimbursement, Pollution NOC, Factory License, and DIC liaisoning."
+        path="/services"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Industrial Subsidy and Compliance Services',
+          itemListElement: servicesData.map((service, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            url: `${SITE_URL}/services/${service.slug}`,
+            name: service.name,
+            description: service.shortDesc,
+          })),
+        }}
+      />
 
       {/* Hero Banner */}
       <section className="bg-primary text-white py-16 px-6 text-center border-b border-accent/20">

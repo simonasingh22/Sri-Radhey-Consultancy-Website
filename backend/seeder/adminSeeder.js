@@ -1,41 +1,48 @@
-const readline = require('readline');
-const dotenv = require('dotenv');
-const path = require('path');
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
+// const dotenv = require('dotenv');
+// const path = require('path');
 
-const connectDB = require('../config/db');
-const Admin = require('../models/Admin');
+// dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+// const connectDB = require('../config/db');
+// const Admin = require('../models/Admin');
 
-const question = (q) => new Promise((res) => rl.question(q, res));
+// const FIXED_ADMIN = {
+//   name: 'Primary Admin',
+//   email: 'admin@sriradheyconsultancy.com',
+//   password: 'SRC_Admin@2025',
+// };
 
-const run = async () => {
-  try {
-    await connectDB();
+// const run = async () => {
+//   try {
+//     await connectDB();
 
-    const email = await question('Admin email: ');
-    const password = await question('Admin password: ');
+//     const existingAdmin = await Admin.findOne({
+//       email: FIXED_ADMIN.email.toLowerCase(),
+//     });
 
-    if (!email || !password) {
-      console.error('Email and password are required');
-      process.exit(1);
-    }
+//     if (existingAdmin) {
+//       existingAdmin.name = FIXED_ADMIN.name;
+//       existingAdmin.password = FIXED_ADMIN.password;
+//       await existingAdmin.save();
 
-    const exists = await Admin.findOne({ email: String(email).toLowerCase() });
-    if (exists) {
-      console.log('Admin already exists:', exists.email);
-      process.exit(0);
-    }
+//       console.log('Fixed admin updated successfully:', FIXED_ADMIN.email);
+//       process.exit(0);
+//     }
 
-    const admin = new Admin({ name: 'Primary Admin', email: String(email).toLowerCase(), password });
-    await admin.save();
-    console.log('Admin created:', admin.email);
-    process.exit(0);
-  } catch (err) {
-    console.error('Seeder error:', err.message || err);
-    process.exit(1);
-  }
-};
+//     const admin = new Admin({
+//       name: FIXED_ADMIN.name,
+//       email: FIXED_ADMIN.email.toLowerCase(),
+//       password: FIXED_ADMIN.password,
+//     });
 
-run();
+//     await admin.save();
+
+//     console.log('Fixed admin created successfully:', FIXED_ADMIN.email);
+//     process.exit(0);
+//   } catch (err) {
+//     console.error('Seeder error:', err.message || err);
+//     process.exit(1);
+//   }
+// };
+
+// run();

@@ -3,6 +3,8 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, Globe, ChevronDown } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 
+import { useSettings } from '../context/SettingsContext';
+
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
@@ -17,6 +19,7 @@ const navigation = [
 ];
 
 export default function Navbar() {
+  const { settings } = useSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
@@ -58,8 +61,8 @@ export default function Navbar() {
               <span>Liaisoning & Compliance Experts</span>
             </div>
             <div className="flex items-center space-x-4">
-              <a href="tel:+919999999999" className="hover:text-accent transition-colors flex items-center gap-1">
-                <Phone className="w-3.5 h-3.5" /> +91-9999999999
+              <a href={`tel:${settings.phone}`} className="hover:text-accent transition-colors flex items-center gap-1">
+                <Phone className="w-3.5 h-3.5" /> {settings.phone}
               </a>
               <span>|</span>
               <span className="flex items-center gap-1">
@@ -76,8 +79,12 @@ export default function Navbar() {
           {/* Logo container utilizing orbital theme */}
           <div className="relative w-12 h-12 rounded-full overflow-hidden bg-black flex items-center justify-center border border-accent/30 group-hover:border-accent transition-all duration-300">
             <img 
-              src={logoImg} 
-              alt="Sri Radhey Consultancy Logo" 
+              src={settings.logo || logoImg} 
+              alt={`${settings.companyName} Logo`} 
+              width="44"
+              height="44"
+              decoding="async"
+              fetchPriority="high"
               className="w-11 h-11 object-contain transform group-hover:scale-105 transition-transform duration-300" 
             />
             {/* Orbital glow path border decoration */}
@@ -85,10 +92,11 @@ export default function Navbar() {
           </div>
           <div>
             <h1 className="text-white text-base md:text-lg font-bold tracking-tight font-display flex items-center leading-none">
-              Sri Radhey <span className="text-accent ml-1.5 font-light text-xs tracking-widest hidden sm:inline">CONSULTANCY</span>
+              {settings.companyName} 
+              {/* <span className="text-accent ml-1.5 font-light text-xs tracking-widest hidden sm:inline">CONSULTANCY</span> */}
             </h1>
             <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight font-sans tracking-wide mt-0.5 max-w-[220px] sm:max-w-none">
-              Industrial Subsidy & Compliance
+              {settings.tagline}
             </p>
           </div>
         </Link>
@@ -134,7 +142,7 @@ export default function Navbar() {
             to="/contact"
             className="bg-accent hover:bg-accent-dark text-primary-dark text-xs font-semibold py-2 px-4 rounded shadow-premium transition-all hover:-translate-y-0.5 hover:shadow-premium-hover"
           >
-            Book Consultation
+            Check Eligibility
           </Link>
         </div>
       </nav>
@@ -161,16 +169,16 @@ export default function Navbar() {
           </div>
           <div className="mt-6 pt-6 border-t border-white/10 flex flex-col gap-3">
             <a
-              href="tel:+919999999999"
+              href={`tel:${settings.phone}`}
               className="flex items-center justify-center gap-2 border border-white/20 text-white font-medium py-2 px-4 rounded text-sm hover:bg-white/5 transition-colors"
             >
-              <Phone className="w-4 h-4" /> Call: +91-9999999999
+              <Phone className="w-4 h-4" /> Call: {settings.phone}
             </a>
             <Link
               to="/contact"
               className="bg-accent hover:bg-accent-dark text-primary-dark text-center font-semibold py-2.5 px-4 rounded text-sm shadow-premium transition-all"
             >
-              Book Consultation
+              Check Eligibility
             </Link>
           </div>
         </div>

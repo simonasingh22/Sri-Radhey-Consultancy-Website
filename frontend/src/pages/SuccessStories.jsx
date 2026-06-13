@@ -1,7 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Landmark, ArrowRight, ShieldCheck, CheckCircle2, TrendingUp } from 'lucide-react';
-
 const caseStudies = [
   {
     industry: "Food Processing (Rice Mill)",

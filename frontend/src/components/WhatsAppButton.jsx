@@ -1,8 +1,8 @@
-import React from 'react';
-import { MessageSquare } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 export default function WhatsAppButton() {
-  const phoneNumber = '919999999999'; // To be updated via env or config later
+  const { settings } = useSettings();
+  const phoneNumber = settings.whatsapp;
   const message = encodeURIComponent('Hello, I would like to discuss subsidy eligibility for my industry.');
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 

@@ -1,68 +1,42 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, User, Clock, ChevronRight } from 'lucide-react';
-
-export const blogPosts = [
-  {
-    slug: "how-to-apply-for-msme-subsidy-in-up",
-    title: "How to Apply for MSME Subsidy in UP",
-    excerpt: "A step-by-step handbook covering Udyam registration, Nivesh Mitra uploads, DPR formatting, and offline files submission to the DIC.",
-    content: "Detailed walkthrough regarding the filing parameters. First, register on Udyam portal. Second, compile a detailed project report (DPR). Third, apply on Nivesh Mitra under the MSME Promotion Policy 2022. Lastly, print bound copies and coordinate inspections with local DIC teams.",
-    author: "Consultancy Desk",
-    date: "June 10, 2026",
-    readTime: "6 min read",
-    tags: ["MSME", "Subsidy Guide"]
-  },
-  {
-    slug: "latest-msme-policy-benefits",
-    title: "Latest MSME Policy Benefits",
-    excerpt: "Breakdown of capital grants, interest waivers, SGST refunds, and stamp duty exemption percentages across different zones in UP.",
-    content: "An audit of the UP MSME Promotion Policy 2022. It divides Uttar Pradesh into zones: Purvanchal and Bundelkhand are placed in the highest incentive tier. Capital subsidies reach up to 25% for micro units, alongside term-loan interest refunds up to 6% per annum.",
-    author: "Policy Advisor",
-    date: "June 02, 2026",
-    readTime: "5 min read",
-    tags: ["Policy", "Incentives"]
-  },
-  {
-    slug: "dic-documentation-guide",
-    title: "DIC Documentation Guide",
-    excerpt: "Avoid common clerical mistakes. Checklist of land deeds, machinery banking certificates, and project reports formatting.",
-    content: "A documentation audit. Over 30% of subsidy applications in UP are delayed or rejected due to tiny clerical errors: misaligned dates, mismatched bank receipt names, or incomplete vendor declarations. This checklist outlines the exact files required.",
-    author: "Liaison Desk",
-    date: "May 28, 2026",
-    readTime: "8 min read",
-    tags: ["DIC", "Documentation"]
-  },
-  {
-    slug: "pollution-noc-process",
-    title: "Pollution NOC Process in Uttar Pradesh",
-    excerpt: "Understanding the CTE and CTO application steps, water/air clearances, and board inspections in Gorakhpur and Lucknow.",
-    content: "A guide to Pollution NOC. Operating a plant without Consent to Establish (CTE) and Consent to Operate (CTO) leads to severe regulatory fines and blocks eligibility for government subsidies. Learn how to draft emissions statements and pass UPPCB audits.",
-    author: "Compliance Specialist",
-    date: "May 15, 2026",
-    readTime: "6 min read",
-    tags: ["UPPCB", "Compliance"]
-  },
-  {
-    slug: "technology-upgradation-subsidy",
-    title: "Technology Upgradation Subsidy Highlights",
-    excerpt: "How existing manufacturing units can claim grants to modernize machines, automate panels, and secure certifications.",
-    content: "A study of the Technology Upgradation Scheme 2019. It supports existing manufacturing industries that are modernizing machinery. The program refunds 15% of machinery purchase invoices and covers ISO certification fees.",
-    author: "Technical Consultant",
-    date: "May 04, 2026",
-    readTime: "5 min read",
-    tags: ["Technology", "Modernization"]
-  }
-];
+import { Calendar, User, Clock, ChevronRight, Loader2 } from 'lucide-react';
+import axios from 'axios';
+import SEO, { SITE_URL } from '../components/SEO';
 
 export default function Blog() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await axios.get('/api/blogs');
+        setPosts(res.data || []);
+      } catch (err) {
+        console.error('Failed to load blog posts:', err);
+        setError('Unable to load articles. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <>
-      <Helmet>
-        <title>Industrial Subsidy & Policy Blog | Sri Radhey Consultancy</title>
-        <meta name="description" content="Read our current insights and guides on UP MSME subsidies, Pollution NOC CTE/CTO, and DIC liaisoning documentation." />
-      </Helmet>
+      <SEO
+        title="Industrial Subsidy & Policy Blog"
+        description="Read current insights and guides on UP MSME subsidies, Pollution NOC CTE/CTO, DIC liaisoning, and industrial documentation."
+        path="/blog"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Blog',
+          name: 'Sri Radhey Consultancy Blog',
+          url: `${SITE_URL}/blog`,
+        }}
+      />
 
       {/* Hero Banner */}
       <section className="bg-primary text-white py-16 px-6 text-center border-b border-accent/20">
@@ -77,47 +51,92 @@ export default function Blog() {
 
       {/* Blog list */}
       <section className="py-20 bg-background">
-        <div className="max-w-5xl mx-auto px-6 space-y-12">
+        <div className="max-w-5xl mx-auto px-6">
           
-          <div className="space-y-8">
-            {blogPosts.map((post, idx) => (
-              <article 
-                key={idx}
-                className="bg-white rounded-xl border border-primary/5 p-6 sm:p-8 shadow-sm hover:shadow-premium transition-shadow duration-300 space-y-4"
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 space-y-4">
+              <Loader2 className="w-10 h-10 text-accent animate-spin" />
+              <p className="text-sm text-text-muted">Fetching latest industry updates...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-16 bg-white rounded-xl border border-primary/5 p-8 shadow-sm">
+              <p className="text-sm text-red-600 font-semibold mb-4">{error}</p>
+              <button 
+                onClick={() => { setLoading(true); setError(null); }}
+                className="bg-primary hover:bg-primary-light text-white text-xs font-semibold py-2 px-6 rounded transition-all"
               >
-                {/* Meta details */}
-                <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted">
-                  <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {post.date}</span>
-                  <span className="flex items-center gap-1"><User className="w-3.5 h-3.5" /> {post.author}</span>
-                  <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {post.readTime}</span>
-                  <div className="flex gap-1.5 ml-auto">
-                    {post.tags.map((tag, id) => (
-                      <span key={id} className="px-2 py-0.5 bg-background-alt text-primary font-semibold text-[10px] rounded">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                Retry
+              </button>
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="text-center py-20 bg-white rounded-xl border border-primary/5 p-8 shadow-sm space-y-4">
+              <p className="text-base text-primary font-display font-semibold">No Articles Published Yet</p>
+              <p className="text-xs text-text-muted max-w-sm mx-auto">
+                Our consultancy desk is currently drafting new guidelines. Please check back soon or consult our expert directly.
+              </p>
+              <Link to="/contact" className="inline-block bg-accent hover:bg-accent-dark text-primary-dark text-xs font-semibold py-2.5 px-6 rounded shadow-premium">
+                Contact Advisory Desk
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-8">
+              {posts.map((post) => {
+                const formattedDate = new Date(post.createdAt).toLocaleDateString('en-IN', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                });
+                
+                const words = post.content ? post.content.split(/\s+/).length : 0;
+                const readTime = Math.max(1, Math.ceil(words / 200)) + " min read";
+                const tags = [post.category, ...(post.keywords || [])].filter(Boolean);
 
-                <h2 className="text-lg sm:text-xl font-bold text-primary font-display hover:text-accent-dark transition-colors">
-                  <Link to={`/blog/${post.slug}`}>{post.title}</Link>
-                </h2>
-
-                <p className="text-xs sm:text-sm text-text-muted leading-relaxed">
-                  {post.excerpt}
-                </p>
-
-                <div className="pt-2">
-                  <Link 
-                    to={`/blog/${post.slug}`}
-                    className="text-primary hover:text-accent-dark font-bold text-xs flex items-center gap-1.5"
+                return (
+                  <article 
+                    key={post._id}
+                    className="bg-white rounded-xl border border-primary/5 p-6 sm:p-8 shadow-sm hover:shadow-premium transition-shadow duration-300 space-y-4"
                   >
-                    Read Full Article <ChevronRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
+                    {/* Meta details */}
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-text-muted">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3.5 h-3.5 text-accent/80" /> {formattedDate}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <User className="w-3.5 h-3.5 text-accent/80" /> Consultancy Desk
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-accent/80" /> {readTime}
+                      </span>
+                      <div className="flex flex-wrap gap-1.5 ml-auto">
+                        {tags.map((tag, id) => (
+                          <span key={id} className="px-2 py-0.5 bg-background-alt text-primary font-semibold text-[10px] rounded">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <h2 className="text-lg sm:text-xl font-bold text-primary font-display hover:text-accent-dark transition-colors">
+                      <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+                    </h2>
+
+                    <p className="text-xs sm:text-sm text-text-muted leading-relaxed">
+                      {post.excerpt}
+                    </p>
+
+                    <div className="pt-2">
+                      <Link 
+                        to={`/blog/${post.slug}`}
+                        className="text-primary hover:text-accent-dark font-bold text-xs flex items-center gap-1.5"
+                      >
+                        Read Full Article <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
 
         </div>
       </section>

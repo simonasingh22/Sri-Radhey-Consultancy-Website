@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { 
   Award, ShieldCheck, ChevronRight, FileText, Settings, 
@@ -8,6 +7,8 @@ import {
   Calendar, Star, Quote, ArrowRight, ArrowLeft
 } from 'lucide-react';
 import logoImg from '../assets/logo.png';
+import { useSettings } from '../context/SettingsContext';
+import SEO, { SITE_URL, createOrganizationSchema } from '../components/SEO';
 
 // Sub-component for Animated Counters
 function AnimatedCounter({ value, duration = 2 }) {
@@ -50,6 +51,7 @@ function AnimatedCounter({ value, duration = 2 }) {
 }
 
 export default function Home() {
+  const { settings } = useSettings();
   const [activeFaq, setActiveFaq] = useState(null);
   const [activeTimelineStep, setActiveTimelineStep] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
@@ -64,54 +66,23 @@ export default function Home() {
 
   return (
     <>
-      <Helmet>
-        <title>Government Subsidy & Industrial Compliance Consultant in UP | Sri Radhey Consultancy</title>
-        <meta name="description" content="Secure MSME subsidies, capital & interest subsidies, Stamp Duty exemptions, Pollution NOC, and Factory licensing in Uttar Pradesh. Trusted DIC liaison partners." />
-        <meta name="keywords" content="MSME subsidy consultant in UP, Industrial subsidy consultant, Capital subsidy consultant, DIC consultant, Pollution NOC consultant, Technology upgradation subsidy consultant, Government subsidy consultant" />
-        {/* Schema Markup for Local Business */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              "name": "Sri Radhey Consultancy",
-              "image": "${window.location.origin}/src/assets/logo.png",
-              "@id": "${window.location.origin}",
-              "url": "${window.location.origin}",
-              "telephone": "+91-9999999999",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "District Industries Centre Liaison Road",
-                "addressLocality": "Gorakhpur",
-                "addressRegion": "UP",
-                "postalCode": "273001",
-                "addressCountry": "IN"
-              },
-              "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": "26.7588",
-                "longitude": "83.3697"
-              },
-              "openingHoursSpecification": {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                  "Saturday"
-                ],
-                "opens": "09:30",
-                "closes": "18:30"
-              },
-              "sameAs": [
-                "https://wa.me/919999999999"
-              ]
-            }
-          `}
-        </script>
-      </Helmet>
+      <SEO
+        title="Government Subsidy & Industrial Compliance Consultant in UP"
+        description="Secure MSME subsidies, capital and interest subsidies, SGST reimbursement, Pollution NOC, and Factory licensing in Uttar Pradesh with trusted DIC liaison partners."
+        path="/"
+        keywords="MSME subsidy consultant in UP, Industrial subsidy consultant, Capital subsidy consultant, DIC consultant, Pollution NOC consultant, Technology upgradation subsidy consultant, Government subsidy consultant"
+        jsonLd={[
+          createOrganizationSchema(settings),
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            '@id': `${SITE_URL}/#website`,
+            name: 'Sri Radhey Consultancy',
+            url: SITE_URL,
+            publisher: { '@id': `${SITE_URL}/#organization` },
+          },
+        ]}
+      />
 
       {/* SECTION 1: HERO */}
       <section className="relative overflow-hidden bg-[#0A1931] py-24 md:py-32 flex items-center border-b border-accent/20">
@@ -147,14 +118,21 @@ export default function Home() {
               >
                 Book Consultation <Calendar className="w-4 h-4" />
               </a>
-              <a 
-                href="#eligibility" 
+              {/* <a 
+                import { Link } from 'react-router-dom';
+
+<Link
+  to="/contact"
+  className="bg-primary hover:bg-primary-light text-white border border-accent/30 font-semibold text-sm py-3 px-6 rounded transition-all"
+>
+  Check Eligibility
+</Link> 
                 className="bg-primary hover:bg-primary-light text-white border border-accent/30 font-semibold text-sm py-3 px-6 rounded transition-all hover:-translate-y-0.5"
               >
                 Check Eligibility
-              </a>
+              </a> */}
               <a 
-                href="https://wa.me/919999999999?text=Hello,%20I%20would%20like%20to%20discuss%20subsidy%20eligibility%20for%20my%20industry." 
+                href={`https://wa.me/${settings.whatsapp}?text=Hello,%20I%20would%20like%20to%20discuss%20subsidy%20eligibility%20for%20my%20industry.`} 
                 target="_blank" 
                 rel="noreferrer"
                 className="bg-secondary hover:bg-secondary-light text-white font-semibold text-sm py-3 px-6 rounded transition-all hover:-translate-y-0.5 flex items-center gap-2"
@@ -176,8 +154,12 @@ export default function Home() {
                 {/* Center Core Logo with Orbital Frame */}
                 <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-[#081326] border-2 border-accent/40 flex items-center justify-center p-4 shadow-2xl z-20 group">
                   <img 
-                    src={logoImg} 
+                    src={settings.logo || logoImg} 
                     alt="Sri Radhey Core Brand Orbit" 
+                    width="112"
+                    height="112"
+                    decoding="async"
+                    fetchPriority="high"
                     className="w-28 h-28 object-contain transition-transform duration-500 group-hover:scale-105" 
                   />
                   {/* Subtle inner gold accent ring */}
@@ -629,7 +611,7 @@ export default function Home() {
               Book Free Consultation
             </a>
             <a 
-              href="https://wa.me/919999999999?text=Hello,%20I%20would%20like%20to%20discuss%20subsidy%20eligibility%20for%20my%20industry." 
+              href={`https://wa.me/${settings.whatsapp}?text=Hello,%20I%20would%20like%20to%20discuss%20subsidy%20eligibility%20for%20my%20industry.`} 
               target="_blank" 
               rel="noreferrer"
               className="bg-secondary hover:bg-secondary-light text-white font-semibold text-sm py-3 px-6 rounded transition-all hover:-translate-y-0.5 flex items-center gap-2"

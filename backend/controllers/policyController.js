@@ -11,7 +11,7 @@ const getPolicies = async (req, res, next) => {
 
 const getPolicyBySlug = async (req, res, next) => {
   try {
-    const policy = await Policy.findOne({ slug: req.params.slug });
+    const policy = await Policy.findOne({ slug: req.params.slug, status: 'published' });
     if (!policy) {
       res.status(404);
       return next(new Error('Policy not found'));
@@ -51,11 +51,14 @@ const updatePolicy = async (req, res, next) => {
 const deletePolicy = async (req, res, next) => {
   try {
     const policy = await Policy.findById(req.params.id);
+
     if (!policy) {
       res.status(404);
       return next(new Error('Policy not found'));
     }
-    await policy.remove();
+
+    await Policy.findByIdAndDelete(req.params.id);
+
     res.json({ message: 'Policy removed' });
   } catch (err) {
     next(err);

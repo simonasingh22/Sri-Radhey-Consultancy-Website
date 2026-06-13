@@ -6,6 +6,14 @@ const sendEmail = async ({ to, subject, text, html }) => {
   const user = process.env.EMAIL_USER;
   const pass = process.env.EMAIL_PASS;
 
+  console.log('Email config check:', {
+    host,
+    port,
+    user,
+    passExists: Boolean(pass),
+    to,
+  });
+
   if (!host || !port || !user || !pass) {
     throw new Error('Email environment variables are not fully configured');
   }
@@ -13,9 +21,15 @@ const sendEmail = async ({ to, subject, text, html }) => {
   const transporter = nodemailer.createTransport({
     host,
     port: Number(port),
-    secure: Number(port) === 465, // true for 465, false for other ports
-    auth: { user, pass },
+    secure: Number(port) === 465,
+    auth: {
+      user,
+      pass,
+    },
   });
+
+  await transporter.verify();
+  console.log('SMTP server is ready to send emails');
 
   const info = await transporter.sendMail({
     from: process.env.EMAIL_FROM || user,
@@ -24,6 +38,8 @@ const sendEmail = async ({ to, subject, text, html }) => {
     text,
     html,
   });
+
+  console.log('Email sent successfully:', info.messageId);
 
   return info;
 };

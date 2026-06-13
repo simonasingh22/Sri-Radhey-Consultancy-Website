@@ -1,14 +1,21 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Award, Compass, Eye, ShieldCheck, Zap, Handshake, Network, CalendarRange } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function About() {
   return (
     <>
-      <Helmet>
-        <title>About Us | Sri Radhey Consultancy - Industrial Incentive Advisors</title>
-        <meta name="description" content="Learn more about Sri Radhey Consultancy. We are Uttar Pradesh's leading consultancy team for MSME promotion policies and factory compliance NOCs." />
-      </Helmet>
+      <SEO
+        title="About Us - Industrial Incentive Advisors"
+        description="Learn more about Sri Radhey Consultancy, Uttar Pradesh's industrial consultancy team for MSME promotion policies, subsidy claims, and factory compliance NOCs."
+        path="/about"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'AboutPage',
+          name: 'About Sri Radhey Consultancy',
+          description: "Uttar Pradesh's trusted partner for state government subsidies and legal factory clearances.",
+        }}
+      />
 
       {/* Hero Banner */}
       <section className="bg-primary text-white py-16 px-6 text-center border-b border-accent/20 relative">
