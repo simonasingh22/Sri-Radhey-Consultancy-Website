@@ -11,7 +11,7 @@ const connectDB = async () => {
     mongoose.set('strictQuery', true);
 
     await mongoose.connect(uri, {
-      maxPoolSize: Number(process.env.MONGO_POOL_SIZE) || 10,
+      maxPoolSize: Number(process.env.MONGO_URL) || 10,
     });
 
     console.log('MongoDB connected');
