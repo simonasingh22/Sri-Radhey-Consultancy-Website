@@ -2,9 +2,12 @@ import { useSettings } from '../context/SettingsContext';
 
 export default function WhatsAppButton() {
   const { settings } = useSettings();
-  const phoneNumber = settings.whatsapp;
-  const message = encodeURIComponent('Hello, I would like to discuss subsidy eligibility for my industry.');
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+  const rawPhone = settings.whatsapp || '916387688787';
+const phoneNumber = rawPhone.replace(/\D/g, '');
+const message = encodeURIComponent(
+  'Hello, I would like to discuss subsidy eligibility for my industry.'
+);
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
   return (
     <a
