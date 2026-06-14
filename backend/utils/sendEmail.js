@@ -4,6 +4,12 @@ const sendEmail = async ({ to, subject, text, html }) => {
   const user = process.env.EMAIL_USER;
   const pass = process.env.EMAIL_PASS;
 
+  console.log('Email config check:', {
+    user,
+    passExists: Boolean(pass),
+    to,
+  });
+
   if (!user || !pass) {
     throw new Error('Email credentials are not configured');
   }
