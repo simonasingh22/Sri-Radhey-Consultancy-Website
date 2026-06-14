@@ -31,13 +31,12 @@ const sendEmail = async ({ to, subject, text, html }) => {
   await transporter.verify();
   console.log('SMTP server is ready to send emails');
 
-  const info = await transporter.sendMail({
-    from: process.env.EMAIL_FROM || user,
-    to,
-    subject,
-    text,
-    html,
-  });
+  const info =await transporter.sendMail({
+  from: `"Sri Radhey Consultancy" <${process.env.EMAIL_USER}>`,
+  to: process.env.EMAIL_TO,
+  subject: "New Website Inquiry - Sri Radhey Consultancy",
+  html: emailHtml,
+});
 
   console.log('Email sent successfully:', info.messageId);
 
