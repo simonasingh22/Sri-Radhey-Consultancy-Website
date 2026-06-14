@@ -13,27 +13,20 @@ import { useSettings } from '../context/SettingsContext';
 import SEO, { SITE_URL, createOrganizationSchema } from '../components/SEO';
 
 const upDistricts = [
-  'Gorakhpur',
-  'Lucknow',
-  'Basti',
-  'Deoria',
-  'Maharajganj',
-  'Kushinagar',
-  'Siddharthnagar',
-  'Sant Kabir Nagar',
-  'Kanpur Nagar',
-  'Gautam Buddha Nagar (Noida)',
-  'Ghaziabad',
-  'Varanasi',
-  'Prayagraj',
-  'Agra',
-  'Meerut',
-  'Bareilly',
-  'Moradabad',
-  'Aligarh',
-  'Saharanpur',
-  'Jhansi',
-  'Ayodhya',
+  "Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya",
+  "Ayodhya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur",
+  "Banda", "Bara Banki", "Bareilly", "Basti", "Bhadohi", "Bijnor",
+  "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah",
+  "Etawah", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar",
+  "Ghaziabad", "Ghazipur", "Gonda", "Gorakhpur", "Hamirpur", "Hapur",
+  "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj",
+  "Kanpur Dehat", "Kanpur Nagar", "Kasganj", "Kaushambi", "Kheri",
+  "Kushinagar", "Lalitpur", "Lucknow", "Mahoba", "Mahrajganj", "Mainpuri",
+  "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar",
+  "Pilibhit", "Pratapgarh", "Prayagraj", "Rae Bareli", "Rampur",
+  "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shamli",
+  "Shrawasti", "Siddharthnagar", "Sitapur", "Sonbhadra", "Sultanpur",
+  "Unnao", "Varanasi"
 ];
 
 const industryTypes = [
