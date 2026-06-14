@@ -85,7 +85,7 @@ const createLead = async (req, res, next) => {
       const subject = `New Website Inquiry - ${lead.serviceRequired}`;
 
       const text = `
-New inquiry received from Sri Radhey Consultancy website.
+New enquiry received from Sri Radhey Consultancy website.
 
 Name: ${lead.name}
 Company: ${lead.company || lead.companyName || 'Not provided'}
@@ -173,12 +173,14 @@ ${lead.message || 'No message provided'}
         </div>
       `;
 
-      await sendEmail({
-        to,
-        subject,
-        text,
-        html,
-      });
+      sendEmail({
+  to,
+  subject,
+  text,
+  html,
+}).catch((emailErr) => {
+  console.error('Error sending lead email:', emailErr.message || emailErr);
+});
     } catch (emailErr) {
       console.error('Error sending lead email:', emailErr.message || emailErr);
     }
