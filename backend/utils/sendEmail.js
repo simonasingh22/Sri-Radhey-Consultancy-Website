@@ -7,23 +7,35 @@ const sendEmail = async ({ to, subject, text, html }) => {
   console.log('Email config check:', {
     user,
     passExists: Boolean(pass),
-    to,
+    to: to || process.env.EMAIL_TO,
   });
 
   if (!user || !pass) {
     throw new Error('Email credentials are not configured');
   }
 
+  // Explicit SMTP config instead of service:gmail
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: Number(process.env.EMAIL_PORT) || 465,
+    secure: true,   // must be true for 465
     auth: {
       user,
       pass,
     },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
+
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000,
+
+    tls: {
+      rejectUnauthorized: false
+    }
   });
+
+  // verify connection first
+  await transporter.verify();
+  console.log('SMTP connection verified');
 
   const info = await transporter.sendMail({
     from: `"Sri Radhey Consultancy" <${user}>`,
@@ -34,6 +46,8 @@ const sendEmail = async ({ to, subject, text, html }) => {
   });
 
   console.log('Email sent successfully:', info.messageId);
+  console.log('Accepted recipients:', info.accepted);
+
   return info;
 };
 
