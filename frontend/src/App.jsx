@@ -12,6 +12,7 @@ const About = lazy(() => import('./pages/About'));
 const Services = lazy(() => import('./pages/Services'));
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const Policies = lazy(() => import('./pages/Policies'));
+const FeaturedPolicy = lazy(() => import('./pages/FeaturedPolicy'));
 const PolicyDetail = lazy(() => import('./pages/PolicyDetail'));
 const Compliance = lazy(() => import('./pages/Compliance'));
 const Industries = lazy(() => import('./pages/Industries'));
@@ -56,6 +57,7 @@ function App() {
                 <Route path="services" element={<Services />} />
                 <Route path="services/:slug" element={<ServiceDetail />} />
                 <Route path="policies" element={<Policies />} />
+                <Route path="featured-policy" element={<FeaturedPolicy />} />
                 <Route path="policies/:slug" element={<PolicyDetail />} />
                 <Route path="compliance" element={<Compliance />} />
                 <Route path="industries" element={<Industries />} />

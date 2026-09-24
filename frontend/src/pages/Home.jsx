@@ -388,47 +388,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 5: FEATURED POLICIES */}
-      <section className="py-20 bg-background-alt border-y border-primary/5">
+      {/* SECTION 5: FEATURED POLICY TEASER */}
+      <section className="bg-background-alt border-y border-primary/5 py-10">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-accent-dark text-xs font-bold uppercase tracking-widest">UP State Subsidies</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-display">Featured Government Policies & Schemes</h2>
-            <div className="h-0.5 w-20 bg-accent mx-auto mt-2"></div>
-            <p className="text-text-muted text-sm mt-3">
-              We assist industrial applicants in applying under specific legislative policies of the UP Government.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredPolicies.map((policy, idx) => (
-              <div 
-                key={idx} 
-                className="bg-white rounded-lg border border-primary/5 shadow-premium hover:shadow-premium-hover transition-all duration-300 p-8 flex flex-col justify-between hover:-translate-y-1"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-[10px] font-bold text-accent-dark uppercase tracking-wider px-2.5 py-1 bg-accent/10 rounded-full">
-                      {policy.category}
-                    </span>
-                    <span className="text-xs text-text-muted font-mono">2026 Active</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-primary mb-3 font-display">
-                    {policy.name}
-                  </h3>
-                  <p className="text-xs text-text-muted leading-relaxed mb-6">
-                    {policy.description}
-                  </p>
-                </div>
-                
-                <div className="border-t border-black/5 pt-4 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-primary">Incentive: <span className="text-secondary">{policy.incentive}</span></span>
-                  <a href="/policies" className="text-primary hover:text-accent-dark text-xs font-bold flex items-center gap-1">
-                    Details <ChevronRight className="w-3 h-3" />
-                  </a>
-                </div>
-              </div>
-            ))}
+          <div className="rounded-2xl bg-primary text-white px-6 py-8 md:px-10 md:py-9 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-premium">
+            <div className="max-w-2xl space-y-2">
+              <span className="text-accent text-xs font-bold uppercase tracking-widest">UP State Subsidies</span>
+              <h2 className="text-2xl md:text-3xl font-bold font-display">Featured Government Policy</h2>
+              <p className="text-sm text-white/70 leading-relaxed">
+                Explore active UP incentive frameworks and find the policy route that best fits your industrial investment.
+              </p>
+            </div>
+            <a href="/featured-policy" className="inline-flex shrink-0 items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-primary-dark font-semibold text-sm py-3 px-6 rounded transition-all hover:-translate-y-0.5">
+              Know More <ArrowRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </section>
@@ -687,45 +660,6 @@ const workflowSteps = [
     shortText: "Direct bank transfer.",
     description: "Securing bank clearance for direct bank transfer (DBT) credit transactions and tracking disbursement schedules until the subsidy amount is successfully credited to your bank account.",
     deliverables: ["Subsidy disbursement confirmation receipt", "Direct credit check in bank ledger"]
-  }
-];
-
-const featuredPolicies = [
-  {
-    name: "MSME Promotion Policy 2022",
-    category: "State Policy",
-    description: "Extensive incentives for new and expanding MSMEs, offering capital subsidies up to 25% on plant and machinery investments.",
-    incentive: "Up to 25% Capital Subsidy",
-  },
-  {
-    name: "Technology Upgradation Scheme 2019",
-    category: "Technology",
-    description: "Incentivizes technology shifts. Provides capital grants for modernization, high-tech installations, and international quality certifications.",
-    incentive: "15% Capital Modernization Grant",
-  },
-  {
-    name: "Capital Subsidy Scheme",
-    category: "Capital investment",
-    description: "Core state grant on capital building blocks. Covers fixed asset investments for mega projects and industrial parks in UP.",
-    incentive: "10% to 25% on Investment Value",
-  },
-  {
-    name: "Interest Subsidy Scheme",
-    category: "Interest Exemption",
-    description: "Exemptions on bank loan interest charges for term loans taken to fund plant machinery purchases or industrial expansion.",
-    incentive: "5% to 6% per annum refund",
-  },
-  {
-    name: "SGST Reimbursement",
-    category: "SGST Refund",
-    description: "Reimbursement of State Goods and Services Tax (SGST) paid on intra-state sales, supporting manufacturing units with operational cash flows.",
-    incentive: "Up to 100% SGST refund for 10 yrs",
-  },
-  {
-    name: "Stamp Duty Exemption",
-    category: "Duty Exemption",
-    description: "Complete or partial exemption of stamp duty fees during industrial land registration and factory plot acquisition.",
-    incentive: "Up to 100% exemption on Land purchase",
   }
 ];
 
