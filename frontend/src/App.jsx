@@ -21,6 +21,7 @@ const Blog = lazy(() => import('./pages/Blog'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const FAQ = lazy(() => import('./pages/FAQ'));
 const Contact = lazy(() => import('./pages/Contact'));
+const CheckEligibility = lazy(() => import('./pages/CheckEligibility'));
 
 // Admin Pages
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
@@ -66,6 +67,7 @@ function App() {
                 <Route path="blog/:slug" element={<BlogDetail />} />
                 <Route path="faq" element={<FAQ />} />
                 <Route path="contact" element={<Contact />} />
+                <Route path="check-eligibility" element={<CheckEligibility />} />
               </Route>
 
               <Route path="/admin">

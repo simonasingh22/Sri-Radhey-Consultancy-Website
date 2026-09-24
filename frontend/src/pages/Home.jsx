@@ -119,19 +119,12 @@ export default function Home() {
               >
                 Book Consultation <Calendar className="w-4 h-4" />
               </a>
-              {/* <a 
-                import { Link } from 'react-router-dom';
-
-<Link
-  to="/contact"
-  className="bg-primary hover:bg-primary-light text-white border border-accent/30 font-semibold text-sm py-3 px-6 rounded transition-all"
->
-  Check Eligibility
-</Link> 
+              <a
+                href="/check-eligibility"
                 className="bg-primary hover:bg-primary-light text-white border border-accent/30 font-semibold text-sm py-3 px-6 rounded transition-all hover:-translate-y-0.5"
               >
                 Check Eligibility
-              </a> */}
+              </a>
               <a 
                 href={`https://wa.me/${settings.whatsapp}?text=Hello,%20I%20would%20like%20to%20discuss%20subsidy%20eligibility%20for%20my%20industry.`} 
                 target="_blank" 
