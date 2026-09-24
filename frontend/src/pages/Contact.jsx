@@ -375,6 +375,14 @@ export default function Contact() {
                   {...register('message')}
                   className="w-full border p-2 rounded text-xs"
                 />
+                <input
+                  type="text"
+                  tabIndex="-1"
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute -left-[9999px] h-px w-px overflow-hidden"
+                  {...register('website')}
+                />
 
                 <button
                   type="submit"

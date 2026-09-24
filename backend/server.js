@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 const leadRoutes = require('./routes/leadRoutes');
+const emailRoutes = require('./routes/emailRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const faqRoutes = require('./routes/faqRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
@@ -63,6 +64,7 @@ const start = async () => {
     });
 
     app.use('/api/leads', leadRoutes);
+    app.use('/api', emailRoutes);
     app.use('/api/blogs', blogRoutes);
     app.use('/api/faqs', faqRoutes);
     app.use('/api/testimonials', testimonialRoutes);

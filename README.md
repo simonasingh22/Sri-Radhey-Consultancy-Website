@@ -38,6 +38,10 @@ Designed for organizations that handle **high-volume consultancy operations**, S
 
 ---
 
+## Email form configuration
+
+The Express backend exposes `POST /api/contact` and `POST /api/eligibility`. Copy `backend/.env.example` to `backend/.env` for local development, then set `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASS`, `EMAIL_FROM`, and `EMAIL_TO` with your SMTP provider credentials. In production, add the same variables to the Render service environment; credentials are never stored in source control.
+
 # 🎯 Business Problems Solved
 
 ```diff id="src002"
