@@ -4,6 +4,7 @@ import { Phone, Mail, MapPin, ExternalLink, ShieldAlert, Award, FileText, Messag
 import logoImg from '../assets/logo.png';
 
 import { useSettings } from '../context/SettingsContext';
+import { siteConfig } from '../config/siteConfig';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -89,16 +90,13 @@ export default function Footer() {
   </h3>
 
   <ul className="grid grid-cols-2 gap-y-3 gap-x-6 text-xs font-sans">
-    <li><Link to="/" className="block hover:text-accent transition-colors">Home</Link></li>
-    <li><Link to="/about" className="block hover:text-accent transition-colors">About Us</Link></li>
-    <li><Link to="/services" className="block hover:text-accent transition-colors">Services</Link></li>
-    <li><Link to="/policies" className="block hover:text-accent transition-colors">Policies</Link></li>
-    <li><Link to="/industries" className="block hover:text-accent transition-colors">Industries</Link></li>
-    <li><Link to="/success-stories" className="block hover:text-accent transition-colors">Success</Link></li>
-    <li><Link to="/blog" className="block hover:text-accent transition-colors">Blog CMS</Link></li>
-    <li><Link to="/faq" className="block hover:text-accent transition-colors">FAQ</Link></li>
-    <li><Link to="/contact" className="block hover:text-accent transition-colors">Contact</Link></li>
-    <li><Link to="/admin" className="block hover:text-accent transition-colors font-medium text-accent/95">Admin Portal</Link></li>
+    {siteConfig.navigation.map((item) => (
+      <li key={item.href}>
+        <Link to={item.href} className="block hover:text-accent transition-colors">
+          {item.name}
+        </Link>
+      </li>
+    ))}
   </ul>
 </div>
 

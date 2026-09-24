@@ -369,12 +369,26 @@ export default function Contact() {
                   </p>
                 )}
 
-                <textarea
-                  rows="4"
-                  placeholder="Message / Project Details"
-                  {...register('message')}
-                  className="w-full border p-2 rounded text-xs"
-                />
+                <div>
+                  <textarea
+                    rows="4"
+                    placeholder="Message / Project Details *"
+                    aria-label="Message or project details"
+                    {...register('message', {
+                      required: 'Please share a message or project detail',
+                      minLength: {
+                        value: 10,
+                        message: 'Please enter at least 10 characters',
+                      },
+                    })}
+                    className="w-full border p-2 rounded text-xs"
+                  />
+                  {errors.message && (
+                    <p className="text-[10px] text-red-600 mt-1">
+                      {errors.message.message}
+                    </p>
+                  )}
+                </div>
                 <input
                   type="text"
                   tabIndex="-1"
