@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { 
   Award, ShieldCheck, ChevronRight, FileText, Settings, 
   HelpCircle, MessageSquare, PhoneCall, CheckCircle2, ChevronDown,
-  Building2, Leaf, Box, Scissors, Wrench, FlaskConical, Cpu, ShieldAlert,
-  Calendar, Star, Quote, ArrowRight, ArrowLeft
+  Building2, Scissors, Pill, Cpu,
+  Calendar, Quote, ArrowRight, ArrowLeft
 } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 import { useSettings } from '../context/SettingsContext';
@@ -55,14 +55,15 @@ export default function Home() {
   const [activeFaq, setActiveFaq] = useState(null);
   const [activeTimelineStep, setActiveTimelineStep] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
 
-  // Auto sliding testimonials
   useEffect(() => {
+    if (isCarouselPaused) return undefined;
     const timer = setInterval(() => {
       setTestimonialIndex((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
+    }, 4500);
     return () => clearInterval(timer);
-  }, []);
+  }, [isCarouselPaused]);
 
   return (
     <>
@@ -406,159 +407,90 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 6: INDUSTRIES SERVED */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-accent-dark text-xs font-bold uppercase tracking-widest">Sectors Covered</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-display">Manufacturing & Processing Industries Served</h2>
-            <div className="h-0.5 w-20 bg-accent mx-auto mt-2"></div>
-            <p className="text-text-muted text-sm mt-3">
-              We specialize in mapping sector-specific compliance rules to optimize eligibility.
-            </p>
+      {/* SECTION 6: MANUFACTURING SECTOR COVERAGE */}
+      <section className="bg-white py-20" aria-labelledby="sector-coverage-heading">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-10 max-w-3xl">
+            <span className="text-xs font-bold uppercase tracking-widest text-accent-dark">Manufacturing Sector Coverage</span>
+            <h2 id="sector-coverage-heading" className="mt-3 font-display text-3xl font-bold text-primary md:text-4xl">Focused support for high-growth units</h2>
+            <p className="mt-3 text-sm leading-relaxed text-text-muted">We map sector-specific incentives and compliance requirements to help each unit move forward with confidence.</p>
           </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {industriesServed.map((ind, idx) => (
-              <div 
-                key={idx}
-                className="border border-primary/5 bg-background-alt p-6 rounded-lg text-center flex flex-col items-center hover:bg-primary hover:text-white transition-all duration-300 group shadow-sm hover:shadow-premium hover:-translate-y-1"
-              >
-                <div className="w-12 h-12 rounded-full bg-primary/5 text-primary flex items-center justify-center mb-4 group-hover:bg-white group-hover:text-primary transition-colors duration-300">
-                  {ind.icon}
-                </div>
-                <h4 className="font-display font-bold text-sm tracking-wide group-hover:text-white text-primary">
-                  {ind.name}
-                </h4>
-                <p className="text-[10px] text-text-muted group-hover:text-white/70 mt-1">
-                  {ind.desc}
-                </p>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            {sectorCoverage.map((sector) => (
+              <div key={sector.name} className="group min-h-[156px] rounded-xl border border-primary/10 bg-background-alt p-5 transition-all hover:-translate-y-1 hover:border-accent/60 hover:bg-primary hover:shadow-premium">
+                <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/5 text-primary transition-colors group-hover:bg-accent group-hover:text-primary-dark">{sector.icon}</div>
+                <h3 className="font-display text-sm font-bold text-primary group-hover:text-white">{sector.name}</h3>
+                <p className="mt-1 text-[11px] leading-relaxed text-text-muted group-hover:text-white/70">{sector.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECTION 7: WHY CHOOSE US */}
-      <section className="py-20 bg-primary text-white relative overflow-hidden">
-        <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute bottom-10 left-10 w-[500px] h-[500px] rounded-full border border-white"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-          {/* Left Text */}
-          <div className="lg:col-span-6 space-y-6">
-            <span className="text-accent text-xs font-bold uppercase tracking-widest">Why Partner With Us</span>
-            <h2 className="text-3xl md:text-4xl font-bold font-display text-white">UP's Leading Industrial Regulatory & Incentive Advisory</h2>
-            <p className="text-white/80 text-sm leading-relaxed">
-              We are not just documentation agents. We coordinate actively with regulatory desks in Gorakhpur and Lucknow to drive claims from registration to disbursal.
-            </p>
-            <div className="pt-2">
-              <a href="/about" className="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-primary-dark font-semibold text-xs py-3 px-6 rounded transition-all">
-                More About Our Credentials <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
+      {/* SECTION 7: PARTNER POSITIONING */}
+      <section className="relative overflow-hidden bg-primary py-20 text-white" aria-labelledby="partner-heading">
+        <div className="absolute -right-24 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full border border-white/10" />
+        <div className="relative mx-auto max-w-7xl px-6">
+          <div className="max-w-4xl">
+            <span className="text-xs font-bold uppercase tracking-widest text-accent">Our regional advantage</span>
+            <h2 id="partner-heading" className="mt-4 font-display text-3xl font-bold text-white md:text-5xl">Gorakhpur <span className="mx-2 text-accent" aria-hidden="true">→</span> Greater Noida</h2>
+            <p className="mt-5 max-w-3xl text-sm leading-relaxed text-white/75 md:text-base">We are not just documentation agents; we coordinate actively with regulatory desks to drive claims from registration to disbursal.</p>
           </div>
-
-          {/* Right Checklist Grid */}
-          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {whyChooseUsList.map((item, idx) => (
-              <div key={idx} className="bg-white/5 border border-white/10 rounded-lg p-5 flex gap-3">
-                <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-display font-bold text-sm text-white mb-1">{item.title}</h4>
-                  <p className="text-[11px] text-white/70 leading-relaxed">{item.desc}</p>
-                </div>
+          <div className="mt-10 grid gap-4 border-t border-white/15 pt-8 sm:grid-cols-3">
+            {whyChooseUsList.slice(0, 3).map((item) => (
+              <div key={item.title} className="flex gap-3">
+                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                <div><h3 className="font-display text-sm font-bold">{item.title}</h3><p className="mt-1 text-xs leading-relaxed text-white/60">{item.desc}</p></div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SECTION 8: TESTIMONIALS */}
-      <section className="py-20 bg-background-alt overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-accent-dark text-xs font-bold uppercase tracking-widest">Client Reviews</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-display">Success Stories from Factory Owners</h2>
-            <div className="h-0.5 w-20 bg-accent mx-auto mt-2"></div>
+      {/* SECTION 8: SUCCESS STORIES */}
+      <section id="success-stories-faq" className="overflow-hidden bg-background-alt py-20" aria-labelledby="success-stories-heading">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div className="max-w-2xl space-y-3">
+              <span className="text-xs font-bold uppercase tracking-widest text-accent-dark">Success Stories</span>
+              <h2 id="success-stories-heading" className="font-display text-3xl font-bold text-primary md:text-4xl">Outcomes that move businesses forward</h2>
+              <p className="text-sm leading-relaxed text-text-muted">Practical results from industrial units that needed accurate documentation and persistent follow-through.</p>
+            </div>
+            <div className="flex gap-2" aria-label="Carousel controls">
+              <button type="button" aria-label="Previous success story" onClick={() => setTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)} className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary transition hover:border-accent hover:text-accent-dark"><ArrowLeft className="h-4 w-4" /></button>
+              <button type="button" aria-label="Next success story" onClick={() => setTestimonialIndex((prev) => (prev + 1) % testimonials.length)} className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/15 bg-white text-primary transition hover:border-accent hover:text-accent-dark"><ArrowRight className="h-4 w-4" /></button>
+            </div>
           </div>
-
-          <div className="max-w-3xl mx-auto relative px-8">
-            {/* Slider Content */}
-            <div className="bg-white border border-primary/5 p-8 sm:p-12 rounded-xl shadow-premium relative">
-              <Quote className="absolute top-6 left-6 text-primary/5 w-16 h-16 pointer-events-none" />
-              
-              <div className="flex gap-1.5 text-accent mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current" />
-                ))}
-              </div>
-              
-              <p className="text-sm sm:text-base text-text-muted italic leading-relaxed mb-6 font-sans">
-                "{testimonials[testimonialIndex].feedback}"
-              </p>
-              
-              <div className="flex justify-between items-end border-t border-black/5 pt-6">
-                <div>
-                  <h4 className="font-display font-bold text-sm text-primary">{testimonials[testimonialIndex].name}</h4>
-                  <span className="text-[11px] text-accent-dark font-medium">{testimonials[testimonialIndex].designation}</span>
-                  <p className="text-[10px] text-text-muted mt-0.5">{testimonials[testimonialIndex].location}</p>
-                </div>
-                <div className="bg-background-alt px-3 py-1.5 rounded border border-black/5 text-[10px] font-mono text-primary">
-                  Policy: {testimonials[testimonialIndex].policy}
-                </div>
-              </div>
-            </div>
-
-            {/* Slider controls */}
-            <div className="flex justify-center gap-4 mt-8">
-              <button 
-                onClick={() => setTestimonialIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-                className="w-10 h-10 rounded-full border border-primary/10 hover:border-accent bg-white flex items-center justify-center text-primary hover:text-accent-dark transition-all shadow-sm"
-              >
-                <ArrowLeft className="w-4 h-4" />
-              </button>
-              <button 
-                onClick={() => setTestimonialIndex((prev) => (prev + 1) % testimonials.length)}
-                className="w-10 h-10 rounded-full border border-primary/10 hover:border-accent bg-white flex items-center justify-center text-primary hover:text-accent-dark transition-all shadow-sm"
-              >
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+          <div onMouseEnter={() => setIsCarouselPaused(true)} onMouseLeave={() => setIsCarouselPaused(false)} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <AnimatePresence mode="popLayout" initial={false}>
+              {testimonials.map((story, idx) => {
+                const position = (idx - testimonialIndex + testimonials.length) % testimonials.length;
+                return (
+                  <motion.article key={story.name} layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: position * 0.04 }} className={`flex min-h-[260px] flex-col rounded-xl border bg-white p-6 shadow-sm ${position === 0 ? 'border-accent ring-1 ring-accent/20' : 'border-primary/10'}`}>
+                    <div className="flex items-center justify-between gap-3"><span className="rounded-full bg-primary/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-primary">{story.sector}</span><Quote className="h-5 w-5 text-accent" /></div>
+                    <h3 className="mt-6 font-display text-lg font-bold text-primary">{story.outcome}</h3>
+                    <p className="mt-3 text-xs leading-relaxed text-text-muted">&quot;{story.feedback}&quot;</p>
+                    <div className="mt-auto border-t border-primary/10 pt-4"><p className="text-xs font-bold text-primary">{story.name}</p><p className="mt-1 text-[10px] text-text-muted">{story.location}</p></div>
+                  </motion.article>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+          <div className="mt-8 flex justify-center gap-2" aria-label="Success story slides">
+            {testimonials.map((story, idx) => <button key={story.name} type="button" aria-label={`Show success story ${idx + 1}`} aria-current={testimonialIndex === idx ? 'true' : undefined} onClick={() => setTestimonialIndex(idx)} className={`h-2 rounded-full transition-all ${testimonialIndex === idx ? 'w-8 bg-accent' : 'w-2 bg-primary/20'}`} />)}
           </div>
         </div>
       </section>
 
       {/* SECTION 9: FAQS */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center space-y-3 mb-16">
-            <span className="text-accent-dark text-xs font-bold uppercase tracking-widest">Help Desk</span>
-            <h2 className="text-3xl font-bold text-primary font-display">Frequently Answered Queries</h2>
-            <div className="h-0.5 w-20 bg-accent mx-auto mt-2"></div>
-          </div>
-
-          <div className="space-y-4">
-            {faqs.map((faq, idx) => (
-              <div 
-                key={idx} 
-                className="border border-primary/10 rounded-lg overflow-hidden transition-all duration-300"
-              >
-                <button
-                  onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                  className="w-full text-left px-6 py-4 bg-background-alt hover:bg-accent/5 font-display font-semibold text-sm text-primary flex justify-between items-center transition-colors"
-                >
-                  <span>{faq.question}</span>
-                  <ChevronDown className={`w-4 h-4 text-primary/60 transition-transform ${activeFaq === idx ? 'rotate-180 text-accent-dark' : ''}`} />
-                </button>
-                {activeFaq === idx && (
-                  <div className="px-6 py-4 bg-white text-xs sm:text-sm text-text-muted leading-relaxed border-t border-primary/5 animate-[fadeIn_0.2s_ease-out]">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            ))}
+      <section className="bg-white py-20" aria-labelledby="faq-heading">
+        <div className="mx-auto max-w-4xl px-6">
+          <div className="mb-10 space-y-3 text-center"><span className="text-xs font-bold uppercase tracking-widest text-accent-dark">Success Stories & FAQ</span><h2 id="faq-heading" className="font-display text-3xl font-bold text-primary md:text-4xl">Frequently answered queries</h2><p className="text-sm text-text-muted">Clear answers before you begin your subsidy or compliance journey.</p></div>
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => {
+              const isOpen = activeFaq === idx;
+              return <div key={faq.question} className="overflow-hidden rounded-xl border border-primary/10"><button type="button" aria-expanded={isOpen} onClick={() => setActiveFaq(isOpen ? null : idx)} className="flex w-full items-center justify-between gap-4 bg-background-alt px-5 py-4 text-left font-display text-sm font-semibold text-primary transition hover:bg-accent/5"><span>{faq.question}</span><ChevronDown className={`h-4 w-4 shrink-0 text-primary/60 transition-transform duration-300 ${isOpen ? 'rotate-180 text-accent-dark' : ''}`} /></button><AnimatePresence initial={false}>{isOpen && <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.22 }}><div className="border-t border-primary/5 bg-white px-5 py-4 text-sm leading-relaxed text-text-muted">{faq.answer}</div></motion.div>}</AnimatePresence></div>;
+            })}
           </div>
         </div>
       </section>
@@ -663,47 +595,11 @@ const workflowSteps = [
   }
 ];
 
-const industriesServed = [
-  {
-    name: "Manufacturing",
-    desc: "Heavy & light manufacturing setups",
-    icon: <Building2 className="w-5 h-5" />
-  },
-  {
-    name: "Food Processing",
-    desc: "Cold storage, flour & rice mills",
-    icon: <Leaf className="w-5 h-5" />
-  },
-  {
-    name: "Packaging",
-    desc: "Cartons, plastics & paper mills",
-    icon: <Box className="w-5 h-5" />
-  },
-  {
-    name: "Textiles",
-    desc: "Spinning, weaving & garments units",
-    icon: <Scissors className="w-5 h-5" />
-  },
-  {
-    name: "Engineering",
-    desc: "Casting, fabrication & machining",
-    icon: <Wrench className="w-5 h-5" />
-  },
-  {
-    name: "Chemicals",
-    desc: "Industrial reagents & specialty compounds",
-    icon: <FlaskConical className="w-5 h-5" />
-  },
-  {
-    name: "Electronics",
-    desc: "Hardware assembly & board manufacturing",
-    icon: <Cpu className="w-5 h-5" />
-  },
-  {
-    name: "Pharma",
-    desc: "Drug formulations & botanical extracts",
-    icon: <ShieldAlert className="w-5 h-5" />
-  }
+const sectorCoverage = [
+  { name: "Textiles", desc: "Spinning, weaving and garments.", icon: <Scissors className="h-5 w-5" /> },
+  { name: "MSME", desc: "Guidance for growing units.", icon: <Building2 className="h-5 w-5" /> },
+  { name: "Electronics", desc: "Assembly and hardware units.", icon: <Cpu className="h-5 w-5" /> },
+  { name: "Pharma", desc: "Formulations and extracts.", icon: <Pill className="h-5 w-5" /> },
 ];
 
 const whyChooseUsList = [
@@ -734,30 +630,10 @@ const whyChooseUsList = [
 ];
 
 const testimonials = [
-  {
-    name: "Shri Rajesh Agrawal",
-    designation: "Owner, Agrawal Agro Industries",
-    location: "Gorakhpur, UP",
-    feedback: "Sri Radhey Consultancy handled our capital subsidy application under the MSME Policy 2022. They formatted our project reports and coordinated with the DIC Gorakhpur. The entire sanctioned incentive amount was credited to our bank account via DBT without any hassle.",
-    policy: "MSME Policy 2022",
-    rating: 5
-  },
-  {
-    name: "Shri Amit Mishra",
-    designation: "Director, Trishul Packaging Products",
-    location: "Basti, UP",
-    feedback: "Getting a Pollution NOC and Electrical Safety clearance was a major headache for our new factory setup. The Sri Radhey team compiled the dossiers and obtained all five compliances in record time. Excellent liaison services.",
-    policy: "UPPCB Pollution NOC & Safety License",
-    rating: 5
-  },
-  {
-    name: "Shri Sanjay Jaiswal",
-    designation: "Managing Partner, Jaiswal Food Processors",
-    location: "Lucknow, UP",
-    feedback: "Thanks to Sri Radhey Consultancy, we secured stamp duty exemption and a 5% interest subsidy on our bank term loan. Their documentation accuracy is excellent. Highly recommended for any UP industrialist.",
-    policy: "Interest Subsidy & Stamp Duty Exemption",
-    rating: 5
-  }
+  { name: "Agrawal Agro Industries", location: "Gorakhpur, UP", sector: "MSME", outcome: "Capital subsidy sanctioned", feedback: "The sanctioned incentive was credited through DBT after careful DIC coordination." },
+  { name: "Trishul Packaging Products", location: "Basti, UP", sector: "Manufacturing", outcome: "Five compliances secured", feedback: "Their dossier preparation helped us obtain Pollution NOC and Electrical Safety clearance." },
+  { name: "Jaiswal Food Processors", location: "Lucknow, UP", sector: "Food Processing", outcome: "Interest subsidy approved", feedback: "We secured stamp duty exemption and interest subsidy with accurate documentation." },
+  { name: "UP Electronics Unit", location: "Greater Noida, UP", sector: "Electronics", outcome: "Technology upgrade mapped", feedback: "The team connected our expansion plan to the right incentive route before filing." },
 ];
 
 const faqs = [
