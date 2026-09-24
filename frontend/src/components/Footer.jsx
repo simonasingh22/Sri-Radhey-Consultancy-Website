@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, ExternalLink, ShieldAlert, Award, FileText } from 'lucide-react';
+import { Phone, Mail, MapPin, ExternalLink, ShieldAlert, Award, FileText, MessageCircle } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 
 import { useSettings } from '../context/SettingsContext';
@@ -127,23 +127,32 @@ export default function Footer() {
                     Branch Office
                   </p>
                   <p>
-                    {settings.addresses?.branchOffice}
+                    Shop No. 2, Savitri Market, Gamma-1, Jagat Farm
                   </p>
                 </div>
 
               </div>
             </li>
-            <li className="flex items-center gap-2.5">
-              <Phone className="w-4 h-4 text-accent" />
-              <a href={`tel:${settings.phone}`} className="hover:text-accent transition-colors text-white/70">
-                {settings.phone}
-              </a>
+            <li className="flex items-start gap-2.5">
+              <Phone className="w-4 h-4 text-accent mt-0.5" aria-hidden="true" />
+              <div className="flex flex-col gap-1">
+                <a href="tel:6387688787" className="hover:text-accent transition-colors text-white/70">6387688787</a>
+                <a href="tel:8303534901" className="hover:text-accent transition-colors text-white/70">8303534901</a>
+              </div>
             </li>
             <li className="flex items-center gap-2.5">
-              <Mail className="w-4 h-4 text-accent" />
-              <a href={`mailto:${settings.email}`} className="hover:text-accent transition-colors text-white/70">
-                {settings.email}
+              <Mail className="w-4 h-4 text-accent" aria-hidden="true" />
+              <a href="mailto:contact.sriradhey@gmail.com" className="hover:text-accent transition-colors text-white/70">contact.sriradhey@gmail.com</a>
+            </li>
+            <li className="flex items-center gap-3 pt-1">
+              <a href="https://wa.me/916387688787" target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp" className="text-white/70 hover:text-accent transition-colors">
+                <MessageCircle className="w-5 h-5" aria-hidden="true" />
               </a>
+              {settings.socialLinks?.linkedin && (
+                <a href={settings.socialLinks.linkedin} target="_blank" rel="noreferrer" aria-label="Sri Radhey Consultancy on LinkedIn" className="text-white/70 hover:text-accent transition-colors text-xs font-semibold">
+                  LinkedIn
+                </a>
+              )}
             </li>
           </ul>
         </div>

@@ -82,7 +82,7 @@ export default function Contact() {
     setSubmitError(null);
 
     try {
-      const response = await axios.post('/api/leads', data, {
+      const response = await axios.post('/api/contact', data, {
         baseURL: import.meta.env.VITE_API_URL || '',
         headers: {
           'Content-Type': 'application/json',
@@ -152,59 +152,38 @@ export default function Contact() {
             </div>
 
             <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/5 text-primary flex items-center justify-center shrink-0">
-                  <MapPin className="w-5 h-5" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-border bg-background-alt p-4">
+                  <MapPin className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
+                  <h4 className="font-display font-semibold text-sm text-primary">Head Office</h4>
+                  <p className="text-xs text-text-muted mt-2 leading-relaxed">
+                    {settings.addresses?.headOffice || 'Head office address to be confirmed.'}
+                  </p>
                 </div>
+                <div className="rounded-xl border border-border bg-background-alt p-4">
+                  <MapPin className="w-5 h-5 text-accent mb-3" aria-hidden="true" />
+                  <h4 className="font-display font-semibold text-sm text-primary">Branch Office</h4>
+                  <p className="text-xs text-text-muted mt-2 leading-relaxed">
+                    Shop No. 2, Savitri Market, Gamma-1, Jagat Farm
+                  </p>
+                </div>
+              </div>
 
-                <div>
-                  <h4 className="font-display font-semibold text-sm text-primary">
-                    Our Offices
-                  </h4>
-
-                  <div className="text-xs text-text-muted mt-2 leading-relaxed space-y-3">
-                    <div>
-                      <span className="font-semibold text-primary">
-                        Head Office (Kanpur)
-                      </span>
-                      <p>{settings.addresses?.headOffice}</p>
-                    </div>
-
-                    <div>
-                      <span className="font-semibold text-primary">
-                        Branch Office (Greater Noida)
-                      </span>
-                      <p>{settings.addresses?.branchOffice}</p>
-                    </div>
+              <div className="rounded-xl border border-border bg-background-alt p-4 space-y-3">
+                <div className="flex gap-3 items-start">
+                  <Phone className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+                  <div className="text-xs text-text-muted space-y-1">
+                    <p className="font-semibold text-primary">Direct Hotlines</p>
+                    <a className="block hover:text-primary" href="tel:6387688787">6387688787</a>
+                    <a className="block hover:text-primary" href="tel:8303534901">8303534901</a>
                   </div>
                 </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/5 text-primary flex items-center justify-center shrink-0">
-                  <Phone className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-display font-semibold text-sm text-primary">
-                    Direct Hotlines
-                  </h4>
-                  <p className="text-xs text-text-muted mt-1">
-                    <a href={`tel:${settings.phone}`}>{settings.phone}</a>
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-lg bg-primary/5 text-primary flex items-center justify-center shrink-0">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="font-display font-semibold text-sm text-primary">
-                    Email Enquiries
-                  </h4>
-                  <p className="text-xs text-text-muted mt-1">
-                    <a href={`mailto:${settings.email}`}>{settings.email}</a>
-                  </p>
+                <div className="flex gap-3 items-start">
+                  <Mail className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
+                  <div className="text-xs text-text-muted">
+                    <p className="font-semibold text-primary">Email Enquiries</p>
+                    <a className="hover:text-primary" href="mailto:contact.sriradhey@gmail.com">contact.sriradhey@gmail.com</a>
+                  </div>
                 </div>
               </div>
             </div>
