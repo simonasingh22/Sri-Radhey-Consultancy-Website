@@ -35,7 +35,7 @@ function NavigationLink({ item, mobile = false, onNavigate }) {
   );
 }
 
-export default function Navbar() {
+export default function Header() {
   const { settings } = useSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -79,14 +79,18 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <div className="hidden flex-1 items-center justify-center gap-0.5 lg:flex">
+        <div className="hidden shrink-0 lg:block">
+          <EligibilityLink />
+        </div>
+
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex">
           {siteConfig.navigation.map((item) => (
             <NavigationLink key={item.name} item={item} />
           ))}
+          <EligibilityLink />
         </div>
 
-        <div className="ml-auto hidden items-center gap-3 lg:flex">
-          <EligibilityLink />
+        <div className="ml-auto hidden shrink-0 items-center gap-3 lg:flex">
           <div className="flex flex-col items-end gap-0.5 border-l border-white/15 pl-3">
             <Link to={siteConfig.adminPortalUrl} className="text-[10px] font-medium text-white/55 transition hover:text-accent">
               Admin Portal
@@ -100,7 +104,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="ml-auto rounded-md p-2 text-white transition hover:bg-white/10 hover:text-accent xl:hidden"
+          className="ml-auto rounded-md p-2 text-white transition hover:bg-white/10 hover:text-accent lg:hidden"
           onClick={() => setMobileMenuOpen((open) => !open)}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
@@ -118,7 +122,7 @@ export default function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'tween', duration: 0.24 }}
-            className="absolute right-0 top-full max-h-[calc(100vh-72px)] w-full overflow-y-auto border-t border-white/10 bg-primary px-5 py-5 shadow-2xl sm:w-96"
+            className="absolute right-0 top-full max-h-[calc(100vh-72px)] w-full overflow-y-auto border-t border-white/10 bg-primary px-5 py-5 shadow-2xl sm:w-96 lg:hidden"
           >
             <div className="space-y-1">
               {siteConfig.navigation.map((item) => (
