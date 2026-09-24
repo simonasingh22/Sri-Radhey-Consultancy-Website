@@ -1,61 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { 
-  Award, ShieldCheck, ChevronRight, FileText, Settings, 
+  Award, ShieldCheck, ChevronRight, FileText, Settings,
   HelpCircle, MessageSquare, PhoneCall, CheckCircle2, ChevronDown,
-  Building2, Scissors, Pill, Cpu,
-  Calendar, Quote, ArrowRight, ArrowLeft
+  Building2, Scissors, Pill, Cpu, ClipboardCheck, SearchCheck, Files,
+  Landmark, BadgeCheck, Send, CircleCheck, Calendar, Quote, ArrowRight, ArrowLeft
 } from 'lucide-react';
 import logoImg from '../assets/logo.png';
 import { useSettings } from '../context/SettingsContext';
 import SEO, { SITE_URL, createOrganizationSchema } from '../components/SEO';
 
-// Sub-component for Animated Counters
-function AnimatedCounter({ value, duration = 2 }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    // Extract numeric value from string (e.g. 50 from 50+)
-    const numericPart = parseInt(value.replace(/\D/g, '')) || 0;
-    if (numericPart === 0) return;
-
-    let start = 0;
-    const totalSteps = 60;
-    const stepDuration = (duration * 1000) / totalSteps;
-    const increment = Math.ceil(numericPart / totalSteps);
-
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= numericPart) {
-        clearInterval(timer);
-        setCount(numericPart);
-      } else {
-        setCount(start);
-      }
-    }, stepDuration);
-
-    return () => clearInterval(timer);
-  }, [value, duration]);
-
-  // Extract non-numeric parts (e.g. "₹" or "+ Cr") to append around the count
-  const prefix = value.startsWith('₹') ? '₹' : '';
-  const suffix = value.replace(/[0-9₹]/g, '');
-
-  return (
-    <span>
-      {prefix}
-      {count}
-      {suffix}
-    </span>
-  );
-}
-
 export default function Home() {
   const { settings } = useSettings();
   const [activeFaq, setActiveFaq] = useState(null);
-  const [activeTimelineStep, setActiveTimelineStep] = useState(0);
+  const [heroPhrase, setHeroPhrase] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const heroPhrases = ['MSME Subsidy Experts', 'NOC & Compliance Desk', 'Gorakhpur to Greater Noida'];
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => setHeroPhrase((prev) => (prev + 1) % heroPhrases.length), 2600);
+    return () => clearInterval(timer);
+  }, [heroPhrases.length]);
 
   useEffect(() => {
     if (isCarouselPaused) return undefined;
@@ -86,118 +52,34 @@ export default function Home() {
       />
 
       {/* SECTION 1: HERO */}
-      <section className="relative overflow-hidden bg-[#0A1931] py-24 md:py-32 flex items-center border-b border-accent/20">
-        {/* Orbital Background Effects */}
-        <div className="absolute inset-0 z-0">
-          {/* Subtle concentric orbit rings in background */}
-          <div className="absolute top-1/2 left-3/4 -translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full border border-white/5 animate-[spin_80s_linear_infinite]"></div>
-          <div className="absolute top-1/2 left-3/4 -translate-y-1/2 -translate-x-1/2 w-[450px] h-[450px] rounded-full border border-accent/10 animate-[spin_40s_linear_infinite]"></div>
-          <div className="absolute top-1/2 left-3/4 -translate-y-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full border border-white/10 animate-[spin_20s_linear_infinite]"></div>
-          <div className="absolute top-10 right-20 w-72 h-72 bg-primary/20 rounded-full blur-[80px]"></div>
-          <div className="absolute bottom-10 left-10 w-96 h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10 items-center">
-          {/* Left Text Column */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/20 text-accent font-semibold text-xs tracking-wider uppercase">
-              <Award className="w-3.5 h-3.5" /> Approved Government Subsidy Partner
+      <section className="relative isolate overflow-hidden bg-[#071426] py-20 text-white md:py-28">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_35%,rgba(196,151,55,0.16),transparent_34%),linear-gradient(120deg,#071426_0%,#0d2340_58%,#102c4a_100%)]" />
+        <motion.div initial={{ opacity: 0, scale: 1.04 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.1 }} className="absolute inset-x-0 bottom-0 h-48 opacity-80" aria-hidden="true">
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-[#06101f]" />
+          <div className="absolute bottom-24 left-[4%] h-24 w-28 bg-[#091b30] md:h-32 md:w-40" />
+          <div className="absolute bottom-24 left-[18%] h-16 w-24 bg-[#091b30] md:h-24 md:w-32" />
+          <div className="absolute bottom-24 right-[10%] h-28 w-36 bg-[#091b30] md:h-40 md:w-52" />
+          <div className="absolute bottom-24 left-[10%] h-32 w-3 bg-[#06101f] md:h-44" />
+          <div className="absolute bottom-24 left-[11.5%] h-2 w-20 bg-[#06101f] md:w-32" />
+          <div className="absolute bottom-24 right-[24%] h-40 w-4 bg-[#06101f] md:h-56" />
+          <div className="absolute bottom-[16rem] right-[23.4%] h-2 w-28 bg-[#06101f] md:w-44" />
+          <div className="absolute bottom-24 left-[40%] h-20 w-2 bg-[#06101f] md:h-28" />
+          <div className="absolute bottom-[9rem] left-[40%] h-2 w-24 rotate-[24deg] bg-[#06101f] md:w-40" />
+        </motion.div>
+        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="max-w-3xl">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-widest text-accent"><Award className="h-3.5 w-3.5" /> Industrial growth, handled end to end</div>
+            <h1 className="font-display text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">Build with confidence. <span className="text-accent">Claim what you&apos;re entitled to.</span></h1>
+            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base md:text-lg">Strategic subsidy advisory and regulatory support for ambitious industrial units across Uttar Pradesh.</p>
+            <div className="mt-4 flex min-h-6 items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent"><span className="h-2 w-2 animate-pulse rounded-full bg-accent" /> <AnimatePresence mode="wait"><motion.span key={heroPhrases[heroPhrase]} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }} transition={{ duration: 0.2 }}>{heroPhrases[heroPhrase]}</motion.span></AnimatePresence></div>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <a href="/contact" className="inline-flex items-center justify-center gap-2 rounded bg-accent px-6 py-3 text-sm font-bold text-primary-dark shadow-premium transition hover:-translate-y-0.5 hover:bg-accent-dark"><Calendar className="h-4 w-4" /> Book Consultation</a>
+              <a href={`https://wa.me/${settings.whatsapp}?text=Hello,%20I%20would%20like%20to%20discuss%20subsidy%20eligibility%20for%20my%20industry.`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded border border-white/35 bg-white/5 px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:border-accent hover:text-accent"><MessageSquare className="h-4 w-4" /> WhatsApp Expert</a>
             </div>
-            
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-display text-white leading-[1.15] tracking-tight">
-              Helping Industries Across Uttar Pradesh Secure <span className="text-accent">Government Subsidies</span> & Regulatory Approvals
-            </h1>
-            
-            <p className="text-white/80 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl font-normal">
-              Complete assistance for MSME subsidies, DIC applications, industrial compliances, policy benefits, and subsidy claims—from documentation to DBT disbursement.
-            </p>
-
-            <div className="flex flex-wrap gap-4 pt-2">
-              <a 
-                href="/contact" 
-                className="bg-accent hover:bg-accent-dark text-primary-dark font-semibold text-sm py-3 px-6 rounded shadow-premium transition-all hover:-translate-y-0.5 hover:shadow-premium-hover flex items-center gap-1.5"
-              >
-                Book Consultation <Calendar className="w-4 h-4" />
-              </a>
-              <a
-                href="/check-eligibility"
-                className="bg-primary hover:bg-primary-light text-white border border-accent/30 font-semibold text-sm py-3 px-6 rounded transition-all hover:-translate-y-0.5"
-              >
-                Check Eligibility
-              </a>
-              <a 
-                href={`https://wa.me/${settings.whatsapp}?text=Hello,%20I%20would%20like%20to%20discuss%20subsidy%20eligibility%20for%20my%20industry.`} 
-                target="_blank" 
-                rel="noreferrer"
-                className="bg-secondary hover:bg-secondary-light text-white font-semibold text-sm py-3 px-6 rounded transition-all hover:-translate-y-0.5 flex items-center gap-2"
-              >
-                <MessageSquare className="w-4 h-4" /> WhatsApp Expert
-              </a>
-            </div>
-          </div>
-
-          {/* Right Visual Column (Interactive Workflow Circle & Logo) */}
-          <div className="lg:col-span-5 flex justify-center items-center relative">
-            <div className="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center">
-              
-              {/* Outer Orbit Path */}
-              <div className="absolute inset-0 rounded-full border border-dashed border-accent/30 animate-[spin_60s_linear_infinite]" />
-              
-              {/* Inner Orbit Circle */}
-              <div className="absolute w-[80%] h-[80%] rounded-full border border-white/10 flex items-center justify-center">
-                {/* Center Core Logo with Orbital Frame */}
-                <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-[#081326] border-2 border-accent/40 flex items-center justify-center p-4 shadow-2xl z-20 group">
-                  <img 
-                    src={settings.logo || logoImg} 
-                    alt="Sri Radhey Core Brand Orbit" 
-                    width="112"
-                    height="112"
-                    decoding="async"
-                    fetchPriority="high"
-                    className="w-28 h-28 object-contain transition-transform duration-500 group-hover:scale-105" 
-                  />
-                  {/* Subtle inner gold accent ring */}
-                  <div className="absolute inset-2 rounded-full border border-accent/10 pointer-events-none group-hover:border-accent/40 transition-colors duration-500"></div>
-                </div>
-              </div>
-
-              {/* Orbiting Nodes (Workflow Indicators) */}
-              <div className="absolute top-[8%] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary border border-accent flex items-center justify-center shadow-lg text-[10px] font-bold text-accent z-30" title="1. Setup Guidance">01</div>
-              <div className="absolute right-[8%] top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-primary border border-accent flex items-center justify-center shadow-lg text-[10px] font-bold text-accent z-30" title="2. DIC Approval">02</div>
-              <div className="absolute bottom-[8%] left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary border border-accent flex items-center justify-center shadow-lg text-[10px] font-bold text-accent z-30" title="3. Claim Verified">03</div>
-              <div className="absolute left-[8%] top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-primary border border-accent flex items-center justify-center shadow-lg text-[10px] font-bold text-accent z-30" title="4. DBT Disbursed">04</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2: TRUST INDICATORS */}
-      <section className="bg-primary py-8 text-white relative border-b border-accent/10">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-white/10">
-          <div>
-            <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-accent mb-1">
-              <AnimatedCounter value="50+" /> Cr
-            </div>
-            <div className="text-[10px] sm:text-xs text-white/70 uppercase tracking-widest font-semibold">Subsidy Assistance</div>
-          </div>
-          <div>
-            <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-accent mb-1">
-              <AnimatedCounter value="300+" />
-            </div>
-            <div className="text-[10px] sm:text-xs text-white/70 uppercase tracking-widest font-semibold">Clients Assisted</div>
-          </div>
-          <div>
-            <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-accent mb-1">
-              <AnimatedCounter value="20+" />
-            </div>
-            <div className="text-[10px] sm:text-xs text-white/70 uppercase tracking-widest font-semibold">Districts Covered</div>
-          </div>
-          <div>
-            <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold font-display text-accent mb-1">
-              <AnimatedCounter value="15+" />
-            </div>
-            <div className="text-[10px] sm:text-xs text-white/70 uppercase tracking-widest font-semibold">Policies Managed</div>
-          </div>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.8 }} className="hidden min-h-[270px] items-end justify-end md:flex">
+            <div className="w-full max-w-sm border-l border-accent/40 pl-6"><p className="text-xs font-bold uppercase tracking-[0.22em] text-accent">Sri Radhey Consultancy</p><p className="mt-3 font-display text-2xl font-semibold leading-tight text-white">From project setup to approved disbursement.</p><div className="mt-6 flex items-center gap-3 text-sm text-white/60"><span className="h-px w-10 bg-accent" /> Uttar Pradesh industrial desk</div></div>
+          </motion.div>
         </div>
       </section>
 
@@ -283,104 +165,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 4: HOW WE WORK (TIMELINE) */}
-      <section className="py-20 bg-white relative">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-accent-dark text-xs font-bold uppercase tracking-widest">Our Method</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-display">Step-by-Step Engagement Workflow</h2>
-            <div className="h-0.5 w-20 bg-accent mx-auto mt-2"></div>
-            <p className="text-text-muted text-sm mt-3">
-              We drive each application manually through structured phases to avoid rejection and delay.
-            </p>
+      {/* SECTION 3: HOW WE WORK */}
+      <section className="bg-white py-16" aria-labelledby="workflow-heading">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto mb-10 max-w-3xl text-center">
+            <span className="text-xs font-bold uppercase tracking-widest text-accent-dark">Our Method</span>
+            <h2 id="workflow-heading" className="mt-3 font-display text-3xl font-bold text-primary md:text-4xl">A clear path from idea to incentive</h2>
+            <div className="mx-auto mt-4 h-0.5 w-20 bg-accent" />
+            <p className="mt-4 text-sm leading-relaxed text-text-muted">We drive each application through structured phases to reduce uncertainty, rework, and delay.</p>
           </div>
-
-          {/* Grid Layout containing Timeline list left and Dynamic Details Right */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Timeline Selection Stack (10 steps) - 7 cols */}
-            <div className="lg:col-span-7 space-y-3">
-              {workflowSteps.map((step, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveTimelineStep(idx)}
-                  className={`w-full text-left px-5 py-4 rounded-lg border transition-all duration-300 flex items-center gap-4 group ${
-                    activeTimelineStep === idx
-                      ? 'bg-primary text-white border-primary shadow-premium'
-                      : 'bg-background-alt border-black/5 text-primary hover:bg-white hover:border-accent'
-                  }`}
-                >
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                    activeTimelineStep === idx
-                      ? 'bg-accent text-primary'
-                      : 'bg-primary/5 text-primary font-bold'
-                  }`}>
-                    {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
-                  </span>
-                  <div className="flex-grow">
-                    <h4 className="font-display font-semibold text-sm leading-none">{step.title}</h4>
-                    <p className={`text-[11px] mt-1 ${activeTimelineStep === idx ? 'text-white/70' : 'text-text-muted'}`}>
-                      {step.shortText}
-                    </p>
-                  </div>
-                  <ChevronRight className={`w-4 h-4 transition-transform ${
-                    activeTimelineStep === idx ? 'text-accent translate-x-1' : 'text-primary/40 group-hover:translate-x-1'
-                  }`} />
-                </button>
-              ))}
-            </div>
-
-            {/* Dynamic Step Details card - 5 cols */}
-            <div className="lg:col-span-5 lg:sticky lg:top-28 bg-primary-dark text-white rounded-xl p-8 border border-accent/20 shadow-2xl relative overflow-hidden">
-              {/* Orbital aura highlight */}
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-accent/10 rounded-full blur-2xl pointer-events-none"></div>
-              
-              <div className="relative z-10 space-y-6">
-                <div className="inline-block px-3 py-1 bg-accent/20 text-accent rounded text-[10px] font-semibold tracking-wider uppercase">
-                  Step {activeTimelineStep + 1} of 10
-                </div>
-                
-                <h3 className="text-2xl font-bold font-display text-white">
-                  {workflowSteps[activeTimelineStep].title}
-                </h3>
-                
-                <p className="text-sm text-white/80 leading-relaxed font-sans min-h-[120px]">
-                  {workflowSteps[activeTimelineStep].description}
-                </p>
-
-                <div className="border-t border-white/10 pt-6">
-                  <h4 className="text-xs font-bold text-accent uppercase tracking-wider mb-2">Required Action / Deliverable</h4>
-                  <ul className="space-y-2">
-                    {workflowSteps[activeTimelineStep].deliverables.map((item, id) => (
-                      <li key={id} className="text-xs text-white/70 flex items-start gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="pt-4 flex items-center justify-between">
-                  <button 
-                    onClick={() => setActiveTimelineStep((prev) => (prev - 1 + 10) % 10)}
-                    className="p-2 border border-white/10 rounded hover:bg-white/5 text-white/80"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                  </button>
-                  <span className="text-xs text-white/40">Use arrows to toggle</span>
-                  <button 
-                    onClick={() => setActiveTimelineStep((prev) => (prev + 1) % 10)}
-                    className="p-2 border border-accent/40 rounded bg-accent/15 text-accent hover:bg-accent/30"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {workflowSteps.map((step, idx) => {
+              const StepIcon = [ClipboardCheck, SearchCheck, MessageSquare, Files, Settings, Landmark, BadgeCheck, Send, CircleCheck, Award][idx] || CheckCircle2;
+              return (
+                <motion.article key={step.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ delay: idx * 0.05, duration: 0.45 }} className="group rounded-xl border border-primary/10 bg-background-alt p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/50 hover:bg-white hover:shadow-premium">
+                  <div className="flex items-center justify-between"><div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-accent transition-colors group-hover:bg-accent group-hover:text-primary-dark"><StepIcon className="h-5 w-5" /></div><span className="font-display text-xs font-bold tracking-widest text-primary/35">{String(idx + 1).padStart(2, '0')}</span></div>
+                  <h3 className="mt-6 font-display text-sm font-bold text-primary">{step.title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-text-muted">{step.shortText}</p>
+                </motion.article>
+              );
+            })}
           </div>
         </div>
       </section>
+
+      {/* SECTION 4: FEATURED POLICY TEASER */}
 
       {/* SECTION 5: FEATURED POLICY TEASER */}
       <section className="bg-background-alt border-y border-primary/5 py-10">
