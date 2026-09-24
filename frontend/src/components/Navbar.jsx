@@ -1,188 +1,143 @@
-import React, { useState, useEffect } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Globe, ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Link, NavLink } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import logoImg from '../assets/logo.png';
-
 import { useSettings } from '../context/SettingsContext';
+import { getWhatsAppUrl, siteConfig } from '../config/siteConfig';
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Services', href: '/services' },
-  { name: 'Subsidies & Policies', href: '/policies' },
-  { name: 'Compliance', href: '/compliance' },
-  { name: 'Industries', href: '/industries' },
-  { name: 'Success Stories', href: '/success-stories' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'FAQ', href: '/faq' },
-  { name: 'Contact', href: '/contact' },
-];
+function EligibilityLink({ mobile = false }) {
+  return (
+    <Link
+      to="/contact"
+      className={`inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2.5 text-xs font-bold tracking-wide text-primary-dark shadow-premium transition hover:-translate-y-0.5 hover:bg-accent-light hover:shadow-premium-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-primary ${
+        mobile ? 'w-full' : ''
+      }`}
+    >
+      Check Eligibility
+    </Link>
+  );
+}
+
+function NavigationLink({ item, mobile = false, onNavigate }) {
+  return (
+    <NavLink
+      to={item.href}
+      onClick={onNavigate}
+      className={({ isActive }) => `block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+        isActive
+          ? 'bg-white/10 text-accent'
+          : 'text-white/85 hover:bg-white/5 hover:text-accent'
+      } ${mobile ? 'w-full' : ''}`}
+    >
+      {item.name}
+    </NavLink>
+  );
+}
 
 export default function Navbar() {
   const { settings } = useSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
+  const WhatsAppIcon = siteConfig.whatsapp.icon;
+  const brandName = settings.companyName || siteConfig.brand.name;
+  const brandSubtitle = siteConfig.brand.subtitle;
+  const whatsappUrl = getWhatsAppUrl();
 
-  // Close mobile menu on route change
   useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location]);
-
-  // Track scroll depth for changing navbar background opacity/elevation
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-primary/95 backdrop-blur-md shadow-premium py-2 border-b border-accent/20' 
-        : 'bg-primary py-4'
-    }`}>
-      {/* Top Bar for Contact Info */}
-      {!isScrolled && (
-        <div className="bg-primary-dark text-white/70 text-xs py-1.5 border-b border-white/5 px-6 hidden md:block">
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-                Uttar Pradesh Industrial Subsidy Partner
-              </span>
-              <span className="text-white/40">|</span>
-              <span>Liaisoning & Compliance Experts</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <a href={`tel:${settings.phone}`} className="hover:text-accent transition-colors flex items-center gap-1">
-                <Phone className="w-3.5 h-3.5" /> {settings.phone}
-              </a>
-              <span>|</span>
-              <span className="flex items-center gap-1">
-                <Globe className="w-3.5 h-3.5" /> DIC, UP Govt. Liaisoning
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <nav className="max-w-7xl mx-auto flex items-center justify-between px-6" aria-label="Global">
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center space-x-3 group focus:outline-none">
-          {/* Logo container utilizing orbital theme */}
-          <div className="relative w-12 h-12 rounded-full overflow-hidden bg-black flex items-center justify-center border border-accent/30 group-hover:border-accent transition-all duration-300">
-            <img 
-              src={settings.logo || logoImg} 
-              alt={`${settings.companyName} Logo`} 
+    <header
+      className={`sticky top-0 z-50 border-b border-accent/20 bg-primary transition-all duration-300 ${
+        isScrolled ? 'bg-primary/95 py-2 shadow-premium backdrop-blur-md' : 'py-3'
+      }`}
+    >
+      <nav className="mx-auto flex max-w-[1440px] items-center gap-4 px-4 sm:px-6 lg:px-8" aria-label="Global">
+        <Link to="/" className="group flex min-w-0 shrink-0 items-center gap-3" aria-label={`${brandName} home`}>
+          <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-accent/40 bg-black transition group-hover:border-accent">
+            <img
+              src={settings.logo || logoImg}
+              alt={`${brandName} logo`}
               width="44"
               height="44"
               decoding="async"
               fetchPriority="high"
-              className="w-11 h-11 object-contain transform group-hover:scale-105 transition-transform duration-300" 
+              className="h-10 w-10 object-contain transition-transform group-hover:scale-105"
             />
-            {/* Orbital glow path border decoration */}
-            <div className="absolute inset-0 border border-accent/0 group-hover:border-accent/30 rounded-full animate-[spin_6s_linear_infinite]" />
           </div>
-          <div>
-            <h1 className="text-white text-base md:text-lg font-bold tracking-tight font-display flex items-center leading-none">
-              {settings.companyName} 
-              {/* <span className="text-accent ml-1.5 font-light text-xs tracking-widest hidden sm:inline">CONSULTANCY</span> */}
-            </h1>
-            <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight font-sans tracking-wide mt-0.5 max-w-[220px] sm:max-w-none">
-              {settings.tagline}
+          <div className="min-w-0">
+            <p className="truncate font-display text-sm font-bold leading-tight tracking-tight text-white sm:text-base">
+              {brandName}
+            </p>
+            <p className="max-w-[220px] truncate text-[9px] leading-tight tracking-wide text-white/60 sm:text-[10px]">
+              {brandSubtitle}
             </p>
           </div>
         </Link>
 
-        {/* Mobile menu button */}
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-white/95 hover:text-accent hover:bg-white/5 transition-colors focus:outline-none"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <span className="sr-only">Open main menu</span>
-            {mobileMenuOpen ? (
-              <X className="h-6 w-6" aria-hidden="true" />
-            ) : (
-              <Menu className="h-6 w-6" aria-hidden="true" />
-            )}
-          </button>
-        </div>
-
-        {/* Desktop Menu links */}
-        <div className="hidden lg:flex lg:gap-x-1 xl:gap-x-2">
-          {navigation.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              className={({ isActive }) => `
-                px-3 py-2 text-[13px] font-medium tracking-wide rounded-md transition-all duration-200
-                ${isActive 
-                  ? 'text-accent bg-white/5 font-semibold border-b-2 border-accent rounded-b-none' 
-                  : 'text-white/90 hover:text-accent hover:bg-white/5'
-                }
-              `}
-            >
-              {item.name}
-            </NavLink>
+        <div className="hidden flex-1 items-center justify-center gap-0.5 lg:flex">
+          {siteConfig.navigation.map((item) => (
+            <NavigationLink key={item.name} item={item} />
           ))}
         </div>
 
-        {/* Desktop Quick CTA */}
-        <div className="hidden lg:flex">
-          <Link
-            to="/contact"
-            className="bg-accent hover:bg-accent-dark text-primary-dark text-xs font-semibold py-2 px-4 rounded shadow-premium transition-all hover:-translate-y-0.5 hover:shadow-premium-hover"
-          >
-            Check Eligibility
-          </Link>
+        <div className="ml-auto hidden items-center gap-3 lg:flex">
+          <EligibilityLink />
+          <div className="flex flex-col items-end gap-0.5 border-l border-white/15 pl-3">
+            <Link to={siteConfig.adminPortalUrl} className="text-[10px] font-medium text-white/55 transition hover:text-accent">
+              Admin Portal
+            </Link>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-semibold text-white/85 transition hover:text-accent">
+              <WhatsAppIcon className="h-3.5 w-3.5 text-secondary-light" aria-hidden="true" />
+              WhatsApp {siteConfig.whatsapp.agentName}
+            </a>
+          </div>
         </div>
+
+        <button
+          type="button"
+          className="ml-auto rounded-md p-2 text-white transition hover:bg-white/10 hover:text-accent xl:hidden"
+          onClick={() => setMobileMenuOpen((open) => !open)}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-navigation"
+          aria-label={mobileMenuOpen ? 'Close main menu' : 'Open main menu'}
+        >
+          {mobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
+        </button>
       </nav>
 
-      {/* Mobile menu, show/hide based on menu state. */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden bg-primary border-t border-white/10 py-4 px-6 absolute top-full left-0 w-full shadow-premium animate-[fadeIn_0.2s_ease-out]">
-          <div className="space-y-1">
-            {navigation.map((item) => (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                className={({ isActive }) => `
-                  block rounded-md px-3 py-2.5 text-sm font-medium transition-colors
-                  ${isActive 
-                    ? 'bg-white/10 text-accent font-semibold' 
-                    : 'text-white/90 hover:bg-white/5 hover:text-accent'
-                  }
-                `}
-              >
-                {item.name}
-              </NavLink>
-            ))}
-          </div>
-          <div className="mt-6 pt-6 border-t border-white/10 flex flex-col gap-3">
-            <a
-              href={`tel:${settings.phone}`}
-              className="flex items-center justify-center gap-2 border border-white/20 text-white font-medium py-2 px-4 rounded text-sm hover:bg-white/5 transition-colors"
-            >
-              <Phone className="w-4 h-4" /> Call: {settings.phone}
-            </a>
-            <Link
-              to="/contact"
-              className="bg-accent hover:bg-accent-dark text-primary-dark text-center font-semibold py-2.5 px-4 rounded text-sm shadow-premium transition-all"
-            >
-              Check Eligibility
-            </Link>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            id="mobile-navigation"
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+            transition={{ type: 'tween', duration: 0.24 }}
+            className="absolute right-0 top-full max-h-[calc(100vh-72px)] w-full overflow-y-auto border-t border-white/10 bg-primary px-5 py-5 shadow-2xl sm:w-96"
+          >
+            <div className="space-y-1">
+              {siteConfig.navigation.map((item) => (
+                <NavigationLink key={item.name} item={item} mobile onNavigate={() => setMobileMenuOpen(false)} />
+              ))}
+            </div>
+            <div className="mt-5 space-y-3 border-t border-white/10 pt-5">
+              <EligibilityLink mobile />
+              <Link to={siteConfig.adminPortalUrl} onClick={() => setMobileMenuOpen(false)} className="block rounded-md px-3 py-2 text-sm font-medium text-white/60 transition hover:bg-white/5 hover:text-accent">
+                Admin Portal
+              </Link>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white/85 transition hover:bg-white/5 hover:text-accent">
+                <WhatsAppIcon className="h-4 w-4 text-secondary-light" aria-hidden="true" />
+                WhatsApp {siteConfig.whatsapp.agentName}
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
