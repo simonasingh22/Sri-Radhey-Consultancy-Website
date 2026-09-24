@@ -52,13 +52,13 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-accent/20 bg-primary transition-all duration-300 ${
-        isScrolled ? 'bg-primary/95 py-2 shadow-premium backdrop-blur-md' : 'py-3'
+      className={`sticky top-0 z-50 border-b border-white/10 bg-primary transition-all duration-300 ${
+        isScrolled ? 'bg-primary/95 py-2 shadow-premium backdrop-blur-md' : 'py-3.5'
       }`}
     >
-      <nav className="mx-auto flex max-w-[1440px] items-center gap-4 px-4 sm:px-6 lg:px-8" aria-label="Global">
+      <nav className="mx-auto flex max-w-[1440px] items-center gap-4 px-4 sm:px-6 xl:gap-6 xl:px-8" aria-label="Primary navigation">
         <Link to="/" className="group flex min-w-0 shrink-0 items-center gap-3" aria-label={`${brandName} home`}>
-          <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-accent/40 bg-black transition group-hover:border-accent">
+          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-accent/50 bg-black/30 shadow-[0_0_0_4px_rgba(200,164,77,0.08)] transition group-hover:border-accent group-hover:shadow-[0_0_0_5px_rgba(200,164,77,0.14)]">
             <img
               src={settings.logo || logoImg}
               alt={`${brandName} logo`}
@@ -70,7 +70,7 @@ export default function Header() {
             />
           </div>
           <div className="min-w-0">
-            <p className="truncate font-display text-sm font-bold leading-tight tracking-tight text-white sm:text-base">
+            <p className="truncate font-display text-[15px] font-semibold leading-tight tracking-tight text-white sm:text-base">
               {brandName}
             </p>
             <p className="max-w-[220px] truncate text-[9px] leading-tight tracking-wide text-white/60 sm:text-[10px]">
@@ -79,18 +79,18 @@ export default function Header() {
           </div>
         </Link>
 
-        <div className="hidden shrink-0 lg:block">
+        <div className="hidden shrink-0 xl:block">
           <EligibilityLink />
         </div>
 
-        <div className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex">
+        <div className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:flex">
           {siteConfig.navigation.map((item) => (
             <NavigationLink key={item.name} item={item} />
           ))}
           <EligibilityLink />
         </div>
 
-        <div className="ml-auto hidden shrink-0 items-center gap-3 lg:flex">
+        <div className="ml-auto hidden shrink-0 items-center gap-3 xl:flex">
           <div className="flex flex-col items-end gap-0.5 border-l border-white/15 pl-3">
             <Link to={siteConfig.adminPortalUrl} className="text-[10px] font-medium text-white/55 transition hover:text-accent">
               Admin Portal
@@ -104,7 +104,7 @@ export default function Header() {
 
         <button
           type="button"
-          className="ml-auto rounded-md p-2 text-white transition hover:bg-white/10 hover:text-accent lg:hidden"
+          className="ml-auto rounded-md p-2 text-white transition hover:bg-white/10 hover:text-accent xl:hidden"
           onClick={() => setMobileMenuOpen((open) => !open)}
           aria-expanded={mobileMenuOpen}
           aria-controls="mobile-navigation"
@@ -122,7 +122,7 @@ export default function Header() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'tween', duration: 0.24 }}
-            className="absolute right-0 top-full max-h-[calc(100vh-72px)] w-full overflow-y-auto border-t border-white/10 bg-primary px-5 py-5 shadow-2xl sm:w-96 lg:hidden"
+            className="absolute right-0 top-full max-h-[calc(100vh-72px)] w-full overflow-y-auto border-t border-accent/20 bg-primary px-5 py-5 shadow-2xl sm:w-96 xl:hidden"
           >
             <div className="space-y-1">
               {siteConfig.navigation.map((item) => (
